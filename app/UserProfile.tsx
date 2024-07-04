@@ -1,10 +1,12 @@
 import { View, Text, StyleSheet } from 'react-native';
-import UserCard from '../UserCard';
+import { NavigationContainer, useNavigation } from '@react-navigation/native'; 
 
 export default function Tab() {
   return (
+    <NavigationContainer>
     <View style={styles.container}>
     </View>
+    </NavigationContainer>
   );
 }
 
