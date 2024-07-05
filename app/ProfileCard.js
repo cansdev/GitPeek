@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Text, View, Image, StyleSheet, Platform } from 'react-native';
 
-const UserCard = ({ username, userAddress, avatarUrl }) => {
-  const [usernameFontSize, setUsernameFontSize] = useState(30);
-  const [addressFontSize, setAddressFontSize] = useState(20);
+const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing }) => {
+
+  const [followersFontSize, setFollowersFontSize] = useState();
+  const [followingFontSize, setFollowingFontSize] = useState();
 
   const handleTextLayout = (text, setTextFontSize) => (event) => {
     const { width } = event.nativeEvent.layout;
@@ -15,7 +16,8 @@ const UserCard = ({ username, userAddress, avatarUrl }) => {
       fontSize -= 1;
     }
 
-    setTextFontSize(fontSize);
+    setFollowersFontSize(fontSize);
+    setFollowingFontSize(fontSize);
   };
 
   const TextWidth = (text, fontSize) => {
@@ -31,19 +33,28 @@ const UserCard = ({ username, userAddress, avatarUrl }) => {
       </View>
       <View style={styles.textLayout}>
         <Text
-          style={[styles.username, { fontSize: usernameFontSize }]}
-          onLayout={handleTextLayout(username, setUsernameFontSize)}
+          style={[styles.username, { fontSize: 30 }]}
           numberOfLines={1}
         >
           {username}
         </Text>
+        
         <Text
-          style={[styles.userAddress, { fontSize: addressFontSize }]}
-          onLayout={handleTextLayout(userAddress, setAddressFontSize)}
+          style={[styles.profileText, { fontSize: followersFontSize }]}
+          onLayout={handleTextLayout(userFollowers, setFollowersFontSize)}
           numberOfLines={1}
         >
-          {userAddress}
+          Followers: {userFollowers}
         </Text>
+
+        <Text
+          style={[styles.profileText, { fontSize: followingFontSize }]}
+          onLayout={handleTextLayout(userFollowing, setFollowingFontSize)}
+          numberOfLines={1}
+        >
+          Following: {userFollowing}
+        </Text>
+
       </View>
     </View>
   );
@@ -95,9 +106,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  userAddress: {
+  profileText: {
+    fontSize: 10,
     paddingBottom: 5,
   },
 });
 
-export default UserCard;
+
+export default ProfileCard;

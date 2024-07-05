@@ -1,20 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; 
 import axios from 'axios';
 import UserCard from './UserCard';
+import { router } from 'expo-router';
+
 
 const SearchBar = () => {
-  const navigation = useNavigation(); 
-
-  const handleUserPress = () => {
-    navigation.navigate('UserProfile'); 
-  };
-
   const [enterText, setEnterText] = useState('');
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const handleUserPress = (user) => {
+    console.log(user.login)
+    router.navigate({
+      pathname: '/userProfile',
+      params: {
+        login: user.login
+      }
+    })
+  };
 
   useEffect(() => {
     let timer;
@@ -31,7 +36,8 @@ const SearchBar = () => {
         timer = setTimeout(async () => {
           const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`);
           setUserData(response.data.items);
-        }, 1000);
+        }, 500);
+        //Use a debounce method for handling API Rate Limiters
       } catch (error) {
         console.error('Fetching github users error: ', error);
         if (error.response && error.response.status === 403) {
@@ -72,7 +78,7 @@ const SearchBar = () => {
       >
         {userData &&
           userData.map((user) => (
-            <TouchableOpacity key={user.id} onPress={handleUserPress}>
+            <TouchableOpacity key={user.id} onPress={() => handleUserPress(user)}>
               <UserCard
                 key={user.id}
                 username={user.login}
