@@ -15,7 +15,7 @@ const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing }) => {
     while (fontSize > 12 && TextWidth(textString, fontSize) > width) {
       fontSize -= 1;
     }
-
+    
     setFollowersFontSize(fontSize);
     setFollowingFontSize(fontSize);
   };
@@ -40,7 +40,7 @@ const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing }) => {
         </Text>
         
         <Text
-          style={[styles.profileText, { fontSize: followersFontSize }]}
+          style={[styles.profile, { fontSize: followersFontSize }]}
           onLayout={handleTextLayout(userFollowers, setFollowersFontSize)}
           numberOfLines={1}
         >
@@ -48,7 +48,7 @@ const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing }) => {
         </Text>
 
         <Text
-          style={[styles.profileText, { fontSize: followingFontSize }]}
+          style={[styles.userFollowing, { fontSize: followingFontSize }]}
           onLayout={handleTextLayout(userFollowing, setFollowingFontSize)}
           numberOfLines={1}
         >

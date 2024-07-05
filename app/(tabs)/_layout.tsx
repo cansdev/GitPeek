@@ -8,7 +8,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Github',
+          title: 'GitHub',
           headerTitleAlign: 'center',
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="search" color={color} />,
           tabBarLabel: 'Search',
