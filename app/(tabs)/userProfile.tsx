@@ -1,57 +1,58 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import axios from 'axios';
-import ProfileCard from '../ProfileCard';
-import RepoButton from '../RepoButton';
+import RepoCard from '../RepoCard';
 import { useLocalSearchParams } from 'expo-router';
 
-export default function Tab({ }: any) {
-  const [userData, setUserData] = useState({
-    id: '',
-    login: '',
-    followers: '',
-    following: '',
-    avatar_url: ''
-  });
-  const [loading, setLoading] = useState(true); 
+interface Repo {
+  id: number;
+  name: string;
+  stargazers_count: number;
+  description: string;
+}
+
+const Tab = ({ }: any) => {
+  const [repoData, setRepoData] = useState<Repo[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const user = useLocalSearchParams();
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchRepoData = async () => {
       try {
-        setLoading(true); 
-        const response = await axios.get(`https://api.github.com/users/${user.login}`);
-        setUserData(response.data);
+        setLoading(true); // Set loading to true before fetching data
+        const response = await axios.get(`https://api.github.com/users/${user.login}/repos`);
+        setRepoData(response.data);
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error('Error fetching repo data:', error);
       } finally {
-        setLoading(false); 
+        setLoading(false); // Set loading to false after fetching (whether success or failure)
       }
     };
 
-    fetchUserData();
+    fetchRepoData();
   }, [user.login]);
 
+  // Only render the ScrollView when repoData has been updated and loading is false
   return (
     <View style={styles.container}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+      {!loading && repoData.length > 0 ? (
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          {repoData.map((repo) => (
+            <RepoCard 
+              key={repo.id}
+              repoName={repo.name}
+              repoStars={repo.stargazers_count}
+              repoDesc={repo.description}
+            />
+          ))}
+        </ScrollView>
       ) : (
-        <>
-          <ProfileCard
-            key={userData.id}
-            username={userData.login}
-            userFollowers={userData.followers}
-            userFollowing={userData.following}
-            avatarUrl={userData.avatar_url}
-          />
-          <RepoButton user={user}/>
-        </>
+        <ActivityIndicator size="large" color="#0000ff" />
       )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -59,4 +60,12 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: 'center',
   },
+
+  scrollView: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
+
+export default Tab;

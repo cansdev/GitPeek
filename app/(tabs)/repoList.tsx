@@ -27,6 +27,7 @@ const Tab = ({ }: any) => {
   useEffect(() => {
     const fetchRepoData = async () => {
       try {
+        setLoading(true); 
         const response = await axios.get(`https://api.github.com/users/${user.login}/repos`);
         setRepoData(response.data);
         setLoading(false);
