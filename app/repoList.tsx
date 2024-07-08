@@ -4,13 +4,19 @@ import axios from 'axios';
 import RepoCard from './RepoCard';
 import { useLocalSearchParams } from 'expo-router';
 
+
+  /** Limited amount of repos available due to 
+    --> Pagination Handling
+    GitHub API apparently limits items for up to 30 per page  
+    */
+
 interface Repo {
     id: number;
     name: string;
     stargazers_count: number;
     description: string;
   }
-  
+
 
 const Tab = ({ }: any) => {
   const [repoData, setRepoData] = useState<Repo[]>([]);
@@ -32,8 +38,6 @@ const Tab = ({ }: any) => {
       } catch (error) {
         console.error('Error fetching repo data:', error);
         setLoading(false);
-
-
       }
     };
 
@@ -42,7 +46,7 @@ const Tab = ({ }: any) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.scrollView}>
         {loading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
@@ -68,6 +72,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start'
   },
+
+  scrollView: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
 
 export default Tab;

@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, ActivityIndicator, Button } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import ProfileCard from './ProfileCard';
 import { Key, useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';

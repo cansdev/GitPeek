@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator, Text, TouchableOpacity, Button } from 'react-native';
-import axios from 'axios';
-import UserCard from './UserCard';
 import { router } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 

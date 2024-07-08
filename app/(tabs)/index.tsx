@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import SearchBar from '../SearchBar'
-import UserCard from '../UserCard'
 
 export default function Tab() {
 
