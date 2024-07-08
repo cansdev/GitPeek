@@ -39,7 +39,6 @@ export default function TabLayout() {
         name="repoList"
         options={{
           title:"Repo List",
-          tabBarIconStyle: { display: "none" },
           tabBarButton: () => null,
         }}
         />
