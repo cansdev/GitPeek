@@ -3,12 +3,12 @@ import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator, Text, Touch
 import axios from 'axios';
 import UserCard from './UserCard';
 import { router } from 'expo-router';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Assuming you want to use FontAwesome icons
+import Icon from 'react-native-vector-icons/FontAwesome'; 
 
 
-const RepoButton = () => {
+const RepoButton = ({user}) => {
 
-    const handleUserPress = (user) => {
+    const handleRepoPress = () => {
         console.log(user.login + ' repositories')
         router.navigate({
           pathname: '/repoList',
@@ -19,15 +19,16 @@ const RepoButton = () => {
       };
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity 
-            style={styles.repoButton}
-            onPress={handleUserPress}
-            >
+        <TouchableOpacity 
+        style={styles.repoButton}
+        onPress={() => handleRepoPress({user})}
+        >
+            <View style={styles.container}>
                 <Text style={styles.repoButtonText}> Repositories </Text>
                 <Icon name="chevron-right" size={20} color="black" />
-            </TouchableOpacity>
-        </View> 
+            </View> 
+        </TouchableOpacity>
+
       );
 };
 

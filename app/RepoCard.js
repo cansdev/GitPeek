@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, Image, StyleSheet, Platform } from 'react-native';
 
-const RepoCard = ({repoName, repoDesc }) => {
+const RepoCard = ({repoName, repoDesc, repoStars }) => {
   const [repoDescFontSize, setRepoDescFontSize] = useState(30);
   const [repoNameFontSize, setRepoNameFontSize] = useState(20);
 
@@ -26,22 +26,29 @@ const RepoCard = ({repoName, repoDesc }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.textLayout}>
+        <View style={styles.contents} >
         <Text
           style={[styles.repoName, { fontSize: repoNameFontSize }]}
-          onLayout={handleTextLayout(username, setRepoNameFontSize)}
-          numberOfLines={1}
+          onLayout={handleTextLayout(repoName, setRepoNameFontSize)}
+          numberOfLines={5}
         >
-          {repoName}
+        {repoName}
+        </Text>
+
+        <Text 
+        style={[styles.repoStars]}
+        numberOfLines={1}
+        >
+        Stars: {repoStars}
         </Text>
         <Text
           style={[styles.repoDesc, { fontSize: repoDescFontSize }]}
-          onLayout={handleTextLayout(userAddress, setRepoDescFontSize)}
-          numberOfLines={1}
+          onLayout={handleTextLayout(repoDesc, setRepoDescFontSize)}
+          numberOfLines={5}
         >
-          {repoDesc}
+        {repoDesc}
         </Text>
-      </View>
+        </View>
     </View>
   );
 };
@@ -80,20 +87,19 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
 
-  textLayout: {
-    flexDirection: 'column',
-    flex: 1,
-    paddingVertical: 15,
-    justifyContent: 'flex-end',
-  },
-
   repoName: {
     paddingBottom: 25,
     fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
+  repoStars: {    
+    fontSize: 15,
   },
 
   repoDesc: {
     paddingBottom: 5,
+    textAlign: 'center',
   },
 });
 

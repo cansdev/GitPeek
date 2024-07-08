@@ -17,25 +17,35 @@ export default function Tab({ }: any) {
   });
   const user = useLocalSearchParams();
 
-  useEffect(() => { 
-    const data = axios.get(`https://api.github.com/users/${user.login}`)
-    .then((response) => {
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`https://api.github.com/users/${user.login}`);
         setUserData(response.data);
-    })
-  }, [])
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserData();
+  }, []);
 
   return (
     <View style={styles.container}>
-      {userData.id ? 
-      <ProfileCard
-        key={userData.id}
-        username={userData.login}
-        userFollowers={userData.followers}
-        userFollowing={userData.following}
-        avatarUrl={userData.avatar_url}
-      /> : <ActivityIndicator />}
-      {userData.id && <RepoButton />}
-      
+      {userData.id ? (
+        <>
+          <ProfileCard
+            key={userData.id}
+            username={userData.login}
+            userFollowers={userData.followers}
+            userFollowing={userData.following}
+            avatarUrl={userData.avatar_url}
+          />
+          <RepoButton user={user}/>
+        </>
+      ) : (
+        <ActivityIndicator size="large" color="#0000ff" />
+      )}
     </View>
   );
 }
