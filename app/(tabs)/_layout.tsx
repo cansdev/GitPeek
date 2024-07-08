@@ -34,6 +34,22 @@ export default function TabLayout() {
           tabBarLabel: 'Profile',
             }}
         />
+
+      <Tabs.Screen
+        name="repoList"
+        options={{
+          title:"Repo List",
+        }}
+        />
+
+      <Tabs.Screen 
+        name="userProfile"
+        options={{
+          title:"User Profile",
+        }}
+
+        />
+
         </Tabs>
   );
 }

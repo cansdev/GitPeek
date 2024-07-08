@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import axios from 'axios';
-import RepoCard from './RepoCard';
+import RepoCard from '../RepoCard';
 import { useLocalSearchParams } from 'expo-router';
 
 

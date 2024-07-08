@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, ActivityIndicator, Button } from 'react-native';
-import ProfileCard from './ProfileCard';
+import ProfileCard from '../ProfileCard';
 import { Key, useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
-import RepoButton from './RepoButton';
+import RepoButton from '../RepoButton';
 
 export default function Tab({ }: any) {
 
