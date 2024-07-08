@@ -41,7 +41,6 @@ export default function TabLayout() {
           title:"Repo List",
           tabBarIconStyle: { display: "none" },
           tabBarButton: () => null,
-          tabBarVisible: false,  
         }}
         />
 
@@ -50,7 +49,6 @@ export default function TabLayout() {
         options={{
           title:"User Profile",
           tabBarButton: () => null,
-          tabBarVisible: false,        
         }}
 
         />

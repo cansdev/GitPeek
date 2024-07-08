@@ -14,7 +14,7 @@ const SearchBar = () => {
   const handleUserPress = (user) => {
     console.log(user.login)
     router.navigate({
-      pathname: './userProfile',
+      pathname: '/userProfile',
       params: {
         login: user.login
       }
