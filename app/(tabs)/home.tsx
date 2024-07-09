@@ -17,3 +17,6 @@ const styles = StyleSheet.create({
 
 //expo kütüphane pat key
 //env -> yenileme
+
+//proje dokümantasyonu -> markdown (zorluklar, kazanımlar, araçlar vs. )
+

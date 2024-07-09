@@ -31,7 +31,6 @@ const Tab = ({ }: any) => {
       try {
         setLoading(true); 
         const response = await axios.get(`https://api.github.com/users/${user.login}/repos`);
-        console.log(process.env.EXPO_PUBLIC_API_KEY);
         headers: {
           Authorization: `token ${token}`
         }
