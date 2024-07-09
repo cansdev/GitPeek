@@ -8,6 +8,7 @@ const RepoCard = ({ repoName, repoDesc, repoStars, repoId }) => {
   const [repoNameFontSize, setRepoNameFontSize] = useState(18);
   const [bookmarked, setBookmarked] = useState(false);
 
+
   const handleTextLayout = (text, setTextFontSize) => (event) => {
     const { width } = event.nativeEvent.layout;
     let fontSize = 18;

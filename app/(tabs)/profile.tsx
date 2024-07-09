@@ -30,6 +30,9 @@ export default function Tab() {
         if (bookmarks) {
           setBookmarkedRepos(JSON.parse(bookmarks));
         }
+        else {
+          setBookmarkedRepos([])
+        }
 
       }
       catch(error) {
