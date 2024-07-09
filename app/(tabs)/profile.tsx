@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RepoCard from '@/components/RepoCard/index';
 interface Repo {
@@ -10,6 +10,15 @@ interface Repo {
 }
 
 export default function Tab() {
+
+  const clearBookmarks = async () => {
+    try {
+      await AsyncStorage.removeItem('bookmarks');
+      setBookmarkedRepos([]);
+    } catch (error) {
+      console.error('Error clearing bookmarks: ', error);
+    }
+  };
 
   const [bookmarkedRepos, setBookmarkedRepos] =  useState<Repo[]>([]);
 
@@ -34,10 +43,12 @@ export default function Tab() {
 
   return (
     <View style={styles.container}>
+      <Button title="Clear Bookmarks" onPress={clearBookmarks} />
       <ScrollView contentContainerStyle={styles.scrollView}>
         {bookmarkedRepos.length === 0 ? (<Text> No bookmarked repositories yet.</Text>) 
         : (
           bookmarkedRepos.map((repo) => (
+            <>
             <RepoCard 
               key={repo.id}
               repoName={repo.name}
@@ -45,6 +56,7 @@ export default function Tab() {
               repoDesc={repo.description}
               repoId={repo.id}
             />
+            </>
           ))
         )}
       </ScrollView>

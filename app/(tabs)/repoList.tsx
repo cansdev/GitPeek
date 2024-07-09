@@ -66,7 +66,7 @@ const Tab = ({ }: any) => {
               repoName={repo.name}
               repoStars={repo.stargazers_count}
               repoDesc={repo.description}
-              repoId={null}
+              repoId={repo.id}
             />
           ))
         )}
