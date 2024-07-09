@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, Image, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const RepoCard = ({ repoName, repoDesc, repoStars }) => {
+const RepoCard = ({ repoName, repoDesc, repoStars, repoId }) => {
   const [repoDescFontSize, setRepoDescFontSize] = useState(16);
   const [repoNameFontSize, setRepoNameFontSize] = useState(18);
   const [bookmarked, setBookmarked] = useState(false);
@@ -26,9 +27,46 @@ const RepoCard = ({ repoName, repoDesc, repoStars }) => {
     return text.length * (fontSize * 0.6);
   };
 
-  const toggleBookmark = () => {
-    setBookmarked(!bookmarked);
+  const toggleBookmark = async () => {
+
+    try {
+      const bookmarks = await AsyncStorage.getItem('bookmarks');
+      let bookmarksArray = bookmarks ? JSON.parse(bookmarks) : [];
+
+      if (bookmarked) {
+        bookmarksArray = bookmarksArray.filter((item) => item.id != repoId);
+        await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));
+      }
+      else {
+        bookmarksArray.push({ id: repoId, name: repoName, stars: repoStars, description: repoDesc });
+        await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));
+      }
+      setBookmarked(!bookmarked);
+    }
+
+    catch(error) {
+        console.error('Error toggling bookmark: ', error);
+    }
+
   };
+
+  useEffect(() => {
+    const checkBookmark = async () => {
+      try {
+      const bookmarks = await AsyncStorage.getItem('bookmarks');
+      const bookmarksArray = bookmarks ? JSON.parse(bookmarks) : [];
+      const isBookmarked = bookmarksArray.some((item) => item.id === repoId);
+      setBookmarked(isBookmarked);
+      }
+
+      catch(error) {
+        console.error('Error toggling bookmark: ', error);
+      }
+
+      checkBookmark();
+
+    };
+  }, [repoId]);
 
   return (
     <View style={styles.container}>

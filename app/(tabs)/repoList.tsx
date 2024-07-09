@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
 import axios from 'axios';
 import RepoCard from '@/components/RepoCard/index';
 import { useLocalSearchParams } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
   /** Limited amount of repos available due to 
     --> Pagination Handling
     GitHub API apparently limits items for up to 30 per page  
     */
-
-  const token = process.env.EXPO_PUBLIC_API_KEY; 
-
     
 interface Repo {
     id: number;
@@ -32,7 +30,7 @@ const Tab = ({ }: any) => {
         setLoading(true); 
         const response = await axios.get(`https://api.github.com/users/${user.login}/repos`);
         headers: {
-          Authorization: `token ${token}`
+          Authorization: process.env.EXPO_PUBLIC_API_KEY;
         }
 
         setRepoData(response.data);
@@ -68,6 +66,7 @@ const Tab = ({ }: any) => {
               repoName={repo.name}
               repoStars={repo.stargazers_count}
               repoDesc={repo.description}
+              repoId={null}
             />
           ))
         )}
