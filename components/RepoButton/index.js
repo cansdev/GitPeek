@@ -10,7 +10,7 @@ const RepoButton = ({user}) => {
         console.log(user.login + ' repositories')
         router.navigate({
           title: 'Repo List',
-          pathname: '/repoList',
+          pathname: './repoList',
           params: {
             login: user.login
           }

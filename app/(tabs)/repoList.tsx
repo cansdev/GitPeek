@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 import axios from 'axios';
-import RepoCard from '../RepoCard';
+import RepoCard from '@/components/RepoCard/index';
 import { useLocalSearchParams } from 'expo-router';
 
 
@@ -10,13 +10,15 @@ import { useLocalSearchParams } from 'expo-router';
     GitHub API apparently limits items for up to 30 per page  
     */
 
+  const token = process.env.EXPO_PUBLIC_API_KEY; 
+
+    
 interface Repo {
     id: number;
     name: string;
     stargazers_count: number;
     description: string;
   }
-
 
 const Tab = ({ }: any) => {
   const [repoData, setRepoData] = useState<Repo[]>([]);
@@ -29,6 +31,11 @@ const Tab = ({ }: any) => {
       try {
         setLoading(true); 
         const response = await axios.get(`https://api.github.com/users/${user.login}/repos`);
+        console.log(process.env.EXPO_PUBLIC_API_KEY);
+        headers: {
+          Authorization: `token ${token}`
+        }
+
         setRepoData(response.data);
         setLoading(false);
         /* response.data.forEach(repo => {
@@ -41,7 +48,12 @@ const Tab = ({ }: any) => {
         setLoading(false);
       }
     };
-
+    
+    //Http Headers
+//JWT Token
+//Axios parameters
+    //
+    //
     fetchRepoData();
   }, [user.login]);
 

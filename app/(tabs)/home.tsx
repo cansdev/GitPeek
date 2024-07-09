@@ -14,3 +14,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+//expo kütüphane pat key
+//env -> yenileme

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import SearchBar from '../SearchBar'
+import SearchBar from '@/components/SearchBar/index'
 
 export default function Tab() {
 

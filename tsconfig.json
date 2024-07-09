@@ -11,7 +11,8 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "app/SearchBar.js", "app/UserCard.js"  ]
+    "components/SearchBar/index.js",
+    "components/UserCard/index.js",
+    "components/ProfileCard/ProfileCard.js"
+  ]
 }

@@ -1,55 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-import axios from 'axios';
-import RepoCard from '../RepoCard';
+import { View, Text, StyleSheet, ActivityIndicator, Button } from 'react-native';
+import ProfileCard from '@/components/ProfileCard/index';
+import { Key, useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
+import axios from 'axios';
+import RepoButton from '@/components/RepoButton/index';
 
-interface Repo {
-  id: number;
-  name: string;
-  stargazers_count: number;
-  description: string;
-}
+const token = process.env.EXPO_PUBLIC_API_KEY; 
 
-const Tab = ({ }: any) => {
-  const [repoData, setRepoData] = useState<Repo[]>([]);
+export default function Tab({ }: any) {
   const [loading, setLoading] = useState(true);
 
+  const [userData, setUserData] = useState({
+    id: '',
+    login: '',
+    followers: '',
+    following: '',
+    avatar_url: ''
+  });
   const user = useLocalSearchParams();
 
   useEffect(() => {
-    const fetchRepoData = async () => {
+    const fetchUserData = async () => {
       try {
-        setLoading(true); // Set loading to true before fetching data
-        const response = await axios.get(`https://api.github.com/users/${user.login}/repos`);
-        setRepoData(response.data);
+        setLoading(true);
+        const response = await axios.get(`https://api.github.com/users/${user.login}`);''
+        headers: {
+          Authorization: `token ${token}`
+        }
+        setUserData(response.data);
+        setLoading(false);
       } catch (error) {
-        console.error('Error fetching repo data:', error);
-      } finally {
-        setLoading(false); // Set loading to false after fetching (whether success or failure)
+        console.error('Error fetching user data:', error);
+        setLoading(false);
       }
     };
-
-    fetchRepoData();
+    fetchUserData();
   }, [user.login]);
 
-  // Only render the ScrollView when repoData has been updated and loading is false
   return (
     <View style={styles.container}>
-      {!loading && repoData.length > 0 ? (
-        <ScrollView contentContainerStyle={styles.scrollView}>
-          {repoData.map((repo) => (
-            <RepoCard 
-              key={repo.id}
-              repoName={repo.name}
-              repoStars={repo.stargazers_count}
-              repoDesc={repo.description}
-            />
-          ))}
-        </ScrollView>
-      ) : (
+      {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
-      )}
+      ) : userData ? (
+        <>
+          <ProfileCard
+            key={userData.id}
+            username={userData.login}
+            userFollowers={userData.followers}
+            userFollowing={userData.following}
+            avatarUrl={userData.avatar_url}
+          />
+          <RepoButton user={user}/>
+        </>
+      ) : null}
     </View>
   );
 };
@@ -60,12 +63,4 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: 'center',
   },
-
-  scrollView: {
-    flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
 });
-
-export default Tab;

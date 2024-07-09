@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import UserCard from './UserCard';
+import UserCard from '../UserCard';
 import { router } from 'expo-router';
 
-
 const SearchBar = () => {
+
+  const token = process.env.EXPO_PUBLIC_API_KEY; 
+
   const [enterText, setEnterText] = useState('');
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -14,7 +16,7 @@ const SearchBar = () => {
   const handleUserPress = (user) => {
     console.log(user.login)
     router.navigate({
-      pathname: '/userProfile',
+      pathname: './userProfile',
       params: {
         login: user.login
       }
@@ -35,9 +37,12 @@ const SearchBar = () => {
 
         timer = setTimeout(async () => {
           const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`);
+          headers: {
+            Authorization: `token ${token}`
+          }
           setUserData(response.data.items);
         }, 500);
-        //Use a debounce method for handling API Rate Limiters
+        //Use a debounce method for handling API Rate Limiters (x-headers)
       } catch (error) {
         console.error('Fetching github users error: ', error);
         if (error.response && error.response.status === 403) {
@@ -60,7 +65,6 @@ const SearchBar = () => {
     setEnterText(text);
   };
   //debounce
-
   return (
     <View style={styles.container}>
       <TextInput
