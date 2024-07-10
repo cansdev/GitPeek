@@ -38,6 +38,7 @@ const RepoCard = ({ repoName, repoDesc, repoStars, repoId }) => {
         bookmarksArray = bookmarksArray.filter((item) => item.id != repoId);
         await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));
       }
+      
       else {
         bookmarksArray.push({ id: repoId, name: repoName, stars: repoStars, description: repoDesc });
         await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RepoCard from '@/components/RepoCard/index';
+import { useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
+
 interface Repo {
   id: number;
   name: string;
@@ -10,6 +13,36 @@ interface Repo {
 }
 
 export default function Tab() {
+
+   useFocusEffect(
+    useCallback(() => {
+
+      console.log('Focusing on profile tab');
+
+      const fetchBookmarks = async () => {
+
+        try {
+          const bookmarks = await AsyncStorage.getItem('bookmarks');
+          if (bookmarks) {
+            setBookmarkedRepos(JSON.parse(bookmarks));
+          }
+          else {
+            setBookmarkedRepos([])
+          }
+  
+        }
+        catch(error) {
+          console.error('Error fetching bookmarks: ', error);
+        }
+      };
+
+      fetchBookmarks();
+      
+      return () => {
+        console.log('Leaving profile tab');
+      }
+    }, [])
+  );
 
   const clearBookmarks = async () => {
     try {
@@ -21,29 +54,7 @@ export default function Tab() {
   };
 
   const [bookmarkedRepos, setBookmarkedRepos] =  useState<Repo[]>([]);
-
-  useEffect(() => {
-    const fetchBookmarks = async () => {
-
-      try {
-        const bookmarks = await AsyncStorage.getItem('bookmarks');
-        if (bookmarks) {
-          setBookmarkedRepos(JSON.parse(bookmarks));
-        }
-        else {
-          setBookmarkedRepos([])
-        }
-
-      }
-      catch(error) {
-        console.error('Error fetching bookmarks: ', error);
-      }
-    };
-
-    fetchBookmarks();
-  }, [])
   
-
   return (
     <View style={styles.container}>
       <Button title="Clear Bookmarks" onPress={clearBookmarks} />

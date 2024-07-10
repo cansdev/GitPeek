@@ -13,6 +13,8 @@
     "**/*.tsx",
     "components/SearchBar/index.js",
     "components/UserCard/index.js",
-    "components/ProfileCard/ProfileCard.js"
+    "components/ProfileCard/ProfileCard.js",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ]
 }

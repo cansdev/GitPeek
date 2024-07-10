@@ -47,10 +47,10 @@ const Tab = ({ }: any) => {
     };
     
     //Http Headers
-//JWT Token
-//Axios parameters
-    //
-    //
+    //JWT Token
+    //Axios parameters
+    
+    
     fetchRepoData();
   }, [user.login]);
 
