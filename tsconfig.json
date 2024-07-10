@@ -16,5 +16,5 @@
     "components/ProfileCard/ProfileCard.js",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-  ]
+, "components/RepoCard/index.tsx"  ]
 }

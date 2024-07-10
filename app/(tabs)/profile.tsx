@@ -66,10 +66,8 @@ export default function Tab() {
             <RepoCard 
               key={repo.id}
               repoName={repo.name}
-              repoStars={null}
               repoDesc={repo.description}
               repoId={repo.id}
-              bookmarked={null}
             />
           ))
         )}
