@@ -62,7 +62,6 @@ export default function Tab() {
         {bookmarkedRepos.length === 0 ? (<Text> No bookmarked repositories yet.</Text>) 
         : (
           bookmarkedRepos.map((repo) => (
-            <>
             <RepoCard 
               key={repo.id}
               repoName={repo.name}
@@ -70,7 +69,6 @@ export default function Tab() {
               repoDesc={repo.description}
               repoId={repo.id}
             />
-            </>
           ))
         )}
       </ScrollView>
