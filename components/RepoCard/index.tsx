@@ -9,7 +9,7 @@ interface RepoCardProps {
     repoStars?: number;
     repoId?: number;
     bookmarked?: boolean; 
-}
+  }
 
 interface Bookmark {
     id: number;
@@ -23,7 +23,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
   repoDesc,
   repoStars = 0,
   repoId = -1,
-  bookmarked: initialBookmarked = false
+  bookmarked: initialBookmarked = false,
 }) => {
   const [repoDescFontSize, setRepoDescFontSize] = useState<number>(16);
   const [repoNameFontSize, setRepoNameFontSize] = useState<number>(18);

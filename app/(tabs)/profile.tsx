@@ -14,6 +14,8 @@ interface Repo {
 
 export default function Tab() {
 
+  const [bookmarkedRepos, setBookmarkedRepos] =  useState<Repo[]>([]);
+
    useFocusEffect(
     useCallback(() => {
 
@@ -52,9 +54,7 @@ export default function Tab() {
       console.error('Error clearing bookmarks: ', error);
     }
   };
-  
 
-  const [bookmarkedRepos, setBookmarkedRepos] =  useState<Repo[]>([]);
   
   return (
     <View style={styles.container}>
@@ -68,6 +68,7 @@ export default function Tab() {
               repoName={repo.name}
               repoDesc={repo.description}
               repoId={repo.id}
+              bookmarked={true}
             />
           ))
         )}

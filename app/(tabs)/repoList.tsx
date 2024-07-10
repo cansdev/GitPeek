@@ -16,6 +16,7 @@ interface Repo {
     name: string;
     stargazers_count: number;
     description: string;
+    bookmarked: number;
   }
 
 const Tab = ({ }: any) => {

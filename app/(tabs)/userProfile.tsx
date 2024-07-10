@@ -13,8 +13,8 @@ export default function Tab({ }: any) {
   const [userData, setUserData] = useState({
     id: '',
     login: '',
-    followers: '',
-    following: '',
+    followers: 0,
+    following: 0,
     avatar_url: ''
   });
   const user = useLocalSearchParams();
