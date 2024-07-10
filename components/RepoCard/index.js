@@ -3,10 +3,10 @@ import { Text, View, Image, StyleSheet, Platform, TouchableOpacity } from 'react
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const RepoCard = ({ repoName, repoDesc, repoStars, repoId }) => {
+const RepoCard = ({ repoName, repoDesc, repoStars, repoId, bookmarked: initialBookmarked }) => {
   const [repoDescFontSize, setRepoDescFontSize] = useState(16);
   const [repoNameFontSize, setRepoNameFontSize] = useState(18);
-  const [bookmarked, setBookmarked] = useState(false);
+  const [bookmarked, setBookmarked] = useState(initialBookmarked);
 
 
   const handleTextLayout = (text, setTextFontSize) => (event) => {
@@ -46,13 +46,17 @@ const RepoCard = ({ repoName, repoDesc, repoStars, repoId }) => {
       }
       setBookmarked(!bookmarked);
     }
-
     catch(error) {
         console.error('Error toggling bookmark: ', error);
     }
 
+    useEffect(() => {
+      setBookmarked(initialBookmarked);
+    }, [initialBookmarked]);
+
   };
 
+  /* 
   useEffect(() => {
     const checkBookmark = async () => {
       try {
@@ -70,6 +74,7 @@ const RepoCard = ({ repoName, repoDesc, repoStars, repoId }) => {
 
     };
   }, [repoId]);
+  */
 
   return (
     <View style={styles.container}>

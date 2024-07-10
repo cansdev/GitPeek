@@ -21,6 +21,7 @@ interface Repo {
 const Tab = ({ }: any) => {
   const [repoData, setRepoData] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [bookmarkedRepos, setBookmarkedRepos] = useState<number[]>([]);
 
   const user = useLocalSearchParams();
 
@@ -46,13 +47,29 @@ const Tab = ({ }: any) => {
       }
     };
     
+    const fetchBookmarks = async () => {
+      try {
+        const bookmarks = await AsyncStorage.getItem('bookmarks');
+        if (bookmarks) {
+          const bookmarksArray = JSON.parse(bookmarks);
+          setBookmarkedRepos(bookmarksArray.map((item: any) => item.id));
+        }
+      }
+      catch(error) {
+        console.error('Error fetching bookmarks: ', error);
+      }
+    }
+  
     //Http Headers
     //JWT Token
     //Axios parameters
     
     
     fetchRepoData();
+    fetchBookmarks();
   }, [user.login]);
+
+  const isBookmarked = (repoId: number) => bookmarkedRepos.includes(repoId);
 
   return (
     <View style={styles.container}>
@@ -67,6 +84,7 @@ const Tab = ({ }: any) => {
               repoStars={repo.stargazers_count}
               repoDesc={repo.description}
               repoId={repo.id}
+              bookmarked={isBookmarked(repo.id)}
             />
           ))
         )}

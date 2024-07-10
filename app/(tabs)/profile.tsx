@@ -52,12 +52,13 @@ export default function Tab() {
       console.error('Error clearing bookmarks: ', error);
     }
   };
+  
 
   const [bookmarkedRepos, setBookmarkedRepos] =  useState<Repo[]>([]);
   
   return (
     <View style={styles.container}>
-      <Button title="Clear Bookmarks" onPress={clearBookmarks} />
+    <Button title="Clear Bookmarks" onPress={clearBookmarks} /> 
       <ScrollView contentContainerStyle={styles.scrollView}>
         {bookmarkedRepos.length === 0 ? (<Text> No bookmarked repositories yet.</Text>) 
         : (
@@ -68,6 +69,7 @@ export default function Tab() {
               repoStars={repo.stargazers_count}
               repoDesc={repo.description}
               repoId={repo.id}
+              bookmarked={null}
             />
           ))
         )}
