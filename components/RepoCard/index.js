@@ -50,11 +50,11 @@ const RepoCard = ({ repoName, repoDesc, repoStars, repoId, bookmarked: initialBo
         console.error('Error toggling bookmark: ', error);
     }
 
-    useEffect(() => {
-      setBookmarked(initialBookmarked);
-    }, [initialBookmarked]);
-
   };
+
+  useEffect(() => {
+    setBookmarked(initialBookmarked);
+  }, [initialBookmarked]);
 
   /* 
   useEffect(() => {
@@ -90,8 +90,10 @@ const RepoCard = ({ repoName, repoDesc, repoStars, repoId, bookmarked: initialBo
           <TouchableOpacity onPress={toggleBookmark} style={styles.bookmarkIcon}>
             <Icon name={bookmarked ? 'bookmark' : 'bookmark-o'} size={25} color={bookmarked ? 'blue' : 'black'} />
           </TouchableOpacity>
-        </View>
-        <Text style={styles.repoStars}>Stars: {repoStars}</Text>
+        </View> 
+        <Text style={styles.repoStars}>
+          {repoStars !== null ? `Stars: ${repoStars}` : null}
+        </Text>
         <Text
           style={[styles.repoDesc, { fontSize: repoDescFontSize }]}
           onLayout={handleTextLayout(repoDesc, setRepoDescFontSize)}
