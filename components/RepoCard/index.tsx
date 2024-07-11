@@ -32,7 +32,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
   const [repoNameFontSize, setRepoNameFontSize] = useState<number>(18);
   const [bookmarked, setBookmarked] = useState<boolean>(initialBookmarked);
 
-  const { bookmarks, addBookmark, removeBookmark } = useBookmarks();
+  const {addBookmark, removeBookmark } = useBookmarks();
 
   const handleTextLayout = (text: string, setTextFontSize: React.Dispatch<React.SetStateAction<number>>) => (event: LayoutChangeEvent) => {
     const { width } = event.nativeEvent.layout;
