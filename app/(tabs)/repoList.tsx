@@ -24,7 +24,7 @@ const token = process.env.EXPO_PUBLIC_API_KEY;
 const Tab = ({ }: any) => {
   const [repoData, setRepoData] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [bookmarkedRepos, setBookmarkedRepos] = useState<number[]>([]);
+  const { bookmarks } = useBookmarks();
 
   const user = useLocalSearchParams();
 
@@ -51,30 +51,15 @@ const Tab = ({ }: any) => {
         setLoading(false);
       }
     };
-    
-    const fetchBookmarks = async () => {
-      try {
-        const bookmarks = await AsyncStorage.getItem('bookmarks');
-        if (bookmarks) {
-          const bookmarksArray = JSON.parse(bookmarks);
-          setBookmarkedRepos(bookmarksArray.map((item: any) => item.id));
-        }
-      }
-      catch(error) {
-        console.error('Error fetching bookmarks: ', error);
-      }
-    }
   
     //Http Headers
     //JWT Token
     //Axios parameters
     
-    
     fetchRepoData();
-    fetchBookmarks();
   }, [user.login]);
 
-  const isBookmarked = (repoId: number) => bookmarkedRepos.includes(repoId);
+  const isBookmarked = (repoId: number) => bookmarks.some((bookmark) => bookmark.id === repoId);
 
   return (
     <View style={styles.container}>

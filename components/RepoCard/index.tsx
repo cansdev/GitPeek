@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Platform, TouchableOpacity, LayoutChangeEvent } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useBookmarks } from '@/context/BookmarkContext';
 
 interface RepoCardProps {
     repoName: string;
@@ -11,12 +12,14 @@ interface RepoCardProps {
     bookmarked?: boolean; 
   }
 
+/*
 interface Bookmark {
     id: number;
     name: string;
     stars?: number;
     description: string;
 }
+*/
 
 const RepoCard: React.FC<RepoCardProps> = ({
   repoName,
@@ -28,6 +31,8 @@ const RepoCard: React.FC<RepoCardProps> = ({
   const [repoDescFontSize, setRepoDescFontSize] = useState<number>(16);
   const [repoNameFontSize, setRepoNameFontSize] = useState<number>(18);
   const [bookmarked, setBookmarked] = useState<boolean>(initialBookmarked);
+
+  const { bookmarks, addBookmark, removeBookmark } = useBookmarks();
 
   const handleTextLayout = (text: string, setTextFontSize: React.Dispatch<React.SetStateAction<number>>) => (event: LayoutChangeEvent) => {
     const { width } = event.nativeEvent.layout;
@@ -46,21 +51,16 @@ const RepoCard: React.FC<RepoCardProps> = ({
   };
 
   const toggleBookmark = async () => {
-    try {
-      const bookmarks = await AsyncStorage.getItem('bookmarks');
-      let bookmarksArray: Bookmark[] = bookmarks ? JSON.parse(bookmarks) : [];
-
-      if (bookmarked) {
-        bookmarksArray = bookmarksArray.filter((item) => item.id !== repoId);
-        await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));
-      } else {
-        bookmarksArray.push({ id: repoId, name: repoName, stars: repoStars, description: repoDesc });
-        await AsyncStorage.setItem('bookmarks', JSON.stringify(bookmarksArray));
+    if (bookmarked) {
+      if (repoId !== undefined) {
+        await removeBookmark(repoId);
       }
-      setBookmarked(!bookmarked);
-    } catch (error) {
-      console.error('Error toggling bookmark: ', error);
+    } else {
+      if (repoId !== undefined) {
+        await addBookmark({ id: repoId, name: repoName, stars: repoStars, description: repoDesc });
+      }
     }
+    setBookmarked(!bookmarked);
   };
 
   useEffect(() => {

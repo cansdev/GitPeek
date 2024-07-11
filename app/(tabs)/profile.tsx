@@ -9,53 +9,22 @@ import { useBookmarks } from '@/context/BookmarkContext';
 interface Repo {
   id: number;
   name: string;
-  stargazers_count: number;
+  stargazers_count?: number;
   description: string;
 }
 
 export default function Tab() {
 
-  const [bookmarkedRepos, setBookmarkedRepos] =  useState<Repo[]>([]);
+  const { bookmarks, clearBookmarks } = useBookmarks();
+  const [bookmarkedRepos, setBookmarkedRepos] = useState<Repo[]>([]);  
 
    useFocusEffect(
     useCallback(() => {
 
-      console.log('Focusing on profile tab');
-
-      const fetchBookmarks = async () => {
-
-        try {
-          const bookmarks = await AsyncStorage.getItem('bookmarks');
-          if (bookmarks) {
-            setBookmarkedRepos(JSON.parse(bookmarks));
-          }
-          else {
-            setBookmarkedRepos([])
-          }
-  
-        }
-        catch(error) {
-          console.error('Error fetching bookmarks: ', error);
-        }
-      };
-
-      fetchBookmarks();
       
-      return () => {
-        console.log('Leaving profile tab');
-      }
-    }, [])
+     setBookmarkedRepos(bookmarks);
+    }, [bookmarks])
   );
-
-  const clearBookmarks = async () => {
-    try {
-      await AsyncStorage.removeItem('bookmarks');
-      setBookmarkedRepos([]);
-    } catch (error) {
-      console.error('Error clearing bookmarks: ', error);
-    }
-  };
-
   
   return (
     <View style={styles.container}>
