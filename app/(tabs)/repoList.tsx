@@ -4,7 +4,7 @@ import axios from 'axios';
 import RepoCard from '@/components/RepoCard/index';
 import { useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useBookmarks } from '@/context/BookmarkContext';
 
   /** Limited amount of repos available due to 
     --> Pagination Handling
@@ -18,6 +18,8 @@ interface Repo {
     description: string;
     bookmarked: number;
   }
+  
+const token = process.env.EXPO_PUBLIC_API_KEY;
 
 const Tab = ({ }: any) => {
   const [repoData, setRepoData] = useState<Repo[]>([]);
@@ -30,10 +32,12 @@ const Tab = ({ }: any) => {
     const fetchRepoData = async () => {
       try {
         setLoading(true); 
-        const response = await axios.get(`https://api.github.com/users/${user.login}/repos`);
-        headers: {
-          Authorization: process.env.EXPO_PUBLIC_API_KEY;
-        }
+       
+        const response = await axios.get(`https://api.github.com/users/${user.login}/repos`, {
+          headers: {
+            Authorization: `token ${token}`
+          }
+        });
 
         setRepoData(response.data);
         setLoading(false);

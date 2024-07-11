@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RepoCard from '@/components/RepoCard/index';
 import { useFocusEffect } from 'expo-router';
 import { useCallback } from 'react';
+import { useBookmarks } from '@/context/BookmarkContext';
 
 interface Repo {
   id: number;
