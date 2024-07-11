@@ -16,16 +16,6 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="home"
-        options={{
-            title: 'Home',
-            headerTitleAlign: 'center',
-            tabBarIcon: ({color}) => <FontAwesome size={28} name="home" color={color} />,
-            tabBarLabel: 'Home',
-        }}
-      />
-
-      <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
