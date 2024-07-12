@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Button } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Button, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RepoCard from '@/components/RepoCard/index';
 import { useFocusEffect } from 'expo-router';
@@ -9,7 +9,7 @@ import { useBookmarks } from '@/context/BookmarkContext';
 interface Repo {
   id: number;
   name: string;
-  stargazers_count?: number;
+  stars?: number;
   description: string;
 }
 
@@ -20,29 +20,32 @@ export default function Tab() {
 
    useFocusEffect(
     useCallback(() => {
-
-      
      setBookmarkedRepos(bookmarks);
+     console.log('Bookmarks from context:', bookmarks);
     }, [bookmarks])
   );
   
+  const renderItem = ({ item }: { item: Repo }) => (
+    <RepoCard
+      key={item.id}
+      repoName={item.name}
+      repoStars={item.stars}
+      repoDesc={item.description}
+      repoId={item.id}
+      bookmarked={true}
+    />
+  );
+
   return (
     <View style={styles.container}>
-    <Button title="Clear Bookmarks" onPress={clearBookmarks} /> 
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        {bookmarkedRepos.length === 0 ? (<Text> No bookmarked repositories yet.</Text>) 
-        : (
-          bookmarkedRepos.map((repo) => (
-            <RepoCard 
-              key={repo.id}
-              repoName={repo.name}
-              repoDesc={repo.description}
-              repoId={repo.id}
-              bookmarked={true}
-            />
-          ))
-        )}
-      </ScrollView>
+      <Button title="Clear Bookmarks" onPress={clearBookmarks} />
+      <FlatList
+        data={bookmarkedRepos}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={<Text>No bookmarked repositories yet.</Text>}
+        contentContainerStyle={styles.flatList}
+      />
     </View>
   );
 }
@@ -53,12 +56,11 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
   },
-
-  scrollView: {
+  flatList: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
 });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Text, View, StyleSheet, Platform, TouchableOpacity, LayoutChangeEvent } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -34,20 +34,24 @@ const RepoCard: React.FC<RepoCardProps> = ({
 
   const {addBookmark, removeBookmark } = useBookmarks();
 
-  const handleTextLayout = (text: string, setTextFontSize: React.Dispatch<React.SetStateAction<number>>) => (event: LayoutChangeEvent) => {
-    const { width } = event.nativeEvent.layout;
-    let fontSize = 18;
+  const adjustFontSize = useCallback((text: string, containerWidth: number, setTextFontSize: React.Dispatch<React.SetStateAction<number>>) => {
+    let fontSize = 16;
 
-    while (fontSize > 12 && TextWidth(text, fontSize) > width) {
+    while (fontSize > 10 && TextWidth(text, fontSize) > containerWidth) {
       fontSize -= 1;
     }
 
     setTextFontSize(fontSize);
-  };
+  }, []);
 
   const TextWidth = (text: string, fontSize: number): number => {
     if (!text) return 0;
     return text.length * (fontSize * 0.6);
+  };
+
+  const handleTextLayout = (text: string, setTextFontSize: React.Dispatch<React.SetStateAction<number>>) => (event: LayoutChangeEvent) => {
+    const { width } = event.nativeEvent.layout;
+    adjustFontSize(text, width, setTextFontSize);
   };
 
   const toggleBookmark = async () => {
@@ -79,7 +83,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
             {repoName}
           </Text>
           <TouchableOpacity onPress={toggleBookmark} style={styles.bookmarkIcon}>
-            <Icon name={bookmarked ? 'bookmark' : 'bookmark-o'} size={25} color={bookmarked ? 'blue' : 'black'} />
+            <Icon name={bookmarked ? 'bookmark' : 'bookmark-o'} size={25} color={bookmarked ? 'black' : 'black'} />
           </TouchableOpacity>
         </View>
         <Text style={styles.repoStars}>
@@ -99,13 +103,15 @@ const RepoCard: React.FC<RepoCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#495569',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ccc',
-    width: '90%',
+    width: 300,
+    height: 150,
     padding: 10,
     marginVertical: 10,
+    alignSelf: 'center',
     ...Platform.select({
       ios: {
         shadowColor: 'black',
@@ -120,6 +126,7 @@ const styles = StyleSheet.create({
   },
   contents: {
     flexDirection: 'column',
+    height: '100%',
   },
   header: {
     flexDirection: 'row',
@@ -128,20 +135,27 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   repoName: {
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)', 
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
     fontWeight: 'bold',
     flexShrink: 1, 
   },
   repoStars: {
-    fontSize: 14,
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)', 
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,    fontSize: 14,
     marginBottom: 5,
   },
   repoDesc: {
-    fontSize: 14,
+    color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)', 
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,    fontSize: 14,
   },
   bookmarkIcon: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
     padding: 5,
   },
 });

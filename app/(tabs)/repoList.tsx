@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, FlatList} from 'react-native';
 import axios from 'axios';
 import RepoCard from '@/components/RepoCard/index';
 import { useLocalSearchParams } from 'expo-router';
@@ -61,24 +61,29 @@ const Tab = ({ }: any) => {
 
   const isBookmarked = (repoId: number) => bookmarks.some((bookmark) => bookmark.id === repoId);
 
+  const renderItem = ({ item }: { item: Repo }) => (
+    <RepoCard
+      key={item.id}
+      repoName={item.name}
+      repoStars={item.stargazers_count}
+      repoDesc={item.description}
+      repoId={item.id}
+      bookmarked={isBookmarked(item.id)}
+    />
+  );
+
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={[styles.scrollView, { paddingBottom: 20 }]}>
       {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
-          repoData.map((repo) => (
-            <RepoCard 
-              key={repo.id}
-              repoName={repo.name}
-              repoStars={repo.stargazers_count}
-              repoDesc={repo.description}
-              repoId={repo.id}
-              bookmarked={isBookmarked(repo.id)}
-            />
-          ))
-        )}
-      </ScrollView>
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <FlatList
+          data={repoData}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.flatList}
+        />
+      )}
     </View>
   );
 };
@@ -92,10 +97,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start'
   },
 
-  scrollView: {
+  flatList: {
     flexGrow: 1,
+    paddingTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 20
   }
 });
 

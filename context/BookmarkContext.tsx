@@ -66,8 +66,6 @@ export const BookmarkProvider: React.FC<{children: ReactNode}> = ({ children }) 
         }
     };
 
-
-
     React.useEffect(() => {
         fetchBookmarks();
     }, []);
