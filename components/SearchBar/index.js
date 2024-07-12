@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Constants from 'expo-constants';
 import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import UserCard from '../UserCard';
 import { router } from 'expo-router';
 
-const token = process.env.EXPO_PUBLIC_API_KEY; 
+const token = Constants.expoConfig?.extra?.apiKey;
+
 
 const SearchBar = () => {
   const [enterText, setEnterText] = useState('');
@@ -35,10 +37,12 @@ const SearchBar = () => {
         setError(null);
 
         timer = setTimeout(async () => {
-          const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`
-            //headers: {
-              //Authorization: `token ${token}`
-            //}
+          const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`,
+            {
+              headers: {
+                Authorization: `token ${token}`
+              }
+            }
           );
           setUserData(response.data.items);
         }, 500);
@@ -57,6 +61,7 @@ const SearchBar = () => {
     };
 
     fetchData();
+    //console.log(`API key: ${token}`);
 
     return () => clearTimeout(timer);
   }, [enterText]);

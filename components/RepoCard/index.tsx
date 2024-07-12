@@ -87,7 +87,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
           </TouchableOpacity>
         </View>
         <Text style={styles.repoStars}>
-          {repoStars !== undefined ? `Stars: ${repoStars}` : null}
+          {repoStars !== undefined ? `Stars: ${repoStars}` : 'Stars: 0'}
         </Text>
         <Text
           style={[styles.repoDesc, { fontSize: repoDescFontSize }]}

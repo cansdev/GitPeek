@@ -4,8 +4,10 @@ import { Key, useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import RepoButton from '@/components/RepoButton/index';
+import Constants from 'expo-constants';
 
-const token = process.env.EXPO_PUBLIC_API_KEY; 
+
+const token = Constants.expoConfig?.extra?.apiKey;
 
 export default function Tab({ }: any) {
   const [loading, setLoading] = useState(true);
@@ -21,12 +23,15 @@ export default function Tab({ }: any) {
 
   useEffect(() => {
     const fetchUserData = async () => {
+
       try {
         setLoading(true);
-        const response = await axios.get(`https://api.github.com/users/${user.login}` 
-          //headers: {
-            //Authorization: `token ${token}`
-          //}
+        const response = await axios.get(`https://api.github.com/users/${user.login}`,
+          {
+            headers: {
+              Authorization: `token ${token}`
+            }
+          }
         );
         
         //bad practice
@@ -38,6 +43,7 @@ export default function Tab({ }: any) {
       }
     };
     fetchUserData();
+    //console.log(`API key: ${token}`);
   }, [user.login]);
 
   return (
