@@ -37,12 +37,12 @@ const SearchBar = () => {
         setError(null);
 
         timer = setTimeout(async () => {
-          const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`,
-            {
-              headers: {
-                Authorization: `token ${token}`
-              }
-            }
+          const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`
+            //{
+              //headers: {
+                //Authorization: `token ${token}`
+              //}
+            //}
           );
           setUserData(response.data.items);
         }, 500);

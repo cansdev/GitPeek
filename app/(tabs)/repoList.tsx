@@ -36,11 +36,13 @@ const Tab = ({ }: any) => {
       try {
         setLoading(true); 
        
-        const response = await axios.get(`https://api.github.com/users/${user.login}/repos`, {
-          headers: {
-            Authorization: `token ${token}`
-          }
-        }
+        const response = await axios.get(`https://api.github.com/users/${user.login}/repos`, 
+          //{
+              //headers: {
+                //Authorization: `token ${token}`
+              //}
+            //}
+        
         );
 
         setRepoData(response.data);
