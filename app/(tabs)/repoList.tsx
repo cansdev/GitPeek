@@ -98,7 +98,6 @@ const Tab = ({ }: any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 15,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start'
@@ -109,7 +108,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 20
   }
 });
 

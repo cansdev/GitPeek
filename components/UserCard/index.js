@@ -51,8 +51,8 @@ const UserCard = ({ username, userAddress, avatarUrl }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ced4de',
-    borderRadius: 10,
+    backgroundColor: '#495569',
+    borderRadius: 15,
     borderWidth: 1,
     borderColor: '#bda9a8',
     flexDirection: 'row',
@@ -91,12 +91,14 @@ const styles = StyleSheet.create({
   },
 
   username: {
+    color: 'white',
     paddingBottom: 25,
     fontWeight: 'bold',
   },
 
   userAddress: {
     paddingBottom: 5,
+    color: 'white',
   },
 });
 

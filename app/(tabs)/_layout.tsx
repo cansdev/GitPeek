@@ -3,7 +3,26 @@ import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: 'blue' }}>
+    <Tabs screenOptions={{ 
+      tabBarActiveTintColor: 'blue', 
+      tabBarInactiveTintColor: 'gray',
+      tabBarStyle: {
+        height: 80,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        elevation: 10, //Android
+        shadowColor: '#000', // iOS
+        shadowOffset: { width: 10, height: 10 }, //iOS
+        shadowOpacity: 0.4, //iOS
+        shadowRadius: 15, //iOS
+        zIndex: 10,
+      },
+      headerStyle: {
+        height: 80,
+        borderBottomLeftRadius: 12,
+        borderBottomRightRadius: 12,
+      }
+      }}>
       <Tabs.Screen
         name="index"
         options={{

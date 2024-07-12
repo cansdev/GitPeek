@@ -39,8 +39,8 @@ const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing }) => {
           {username}
         </Text>
         
-        <Text
-          style={[styles.profile, { fontSize: followersFontSize }]}
+        <Text 
+          style={[styles.userFollowers, { fontSize: followersFontSize }]}
           onLayout={handleTextLayout(userFollowers, setFollowersFontSize)}
           numberOfLines={1}
         >
@@ -62,7 +62,7 @@ const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ced4de',
+    backgroundColor: '#495569',
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#bda9a8',
@@ -102,11 +102,21 @@ const styles = StyleSheet.create({
   },
 
   username: {
+    color: 'white',
     paddingBottom: 25,
     fontWeight: 'bold',
   },
 
+  userFollowers: {
+    color: 'white',
+  },
+
+  userFollowing: {
+    color: 'white',
+  },
+
   profileText: {
+    color: 'white',
     fontSize: 10,
     paddingBottom: 5,
   },

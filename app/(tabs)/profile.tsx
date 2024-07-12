@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Button, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, FlatList } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RepoCard from '@/components/RepoCard/index';
 import { useFocusEffect } from 'expo-router';
@@ -38,7 +38,9 @@ export default function Tab() {
 
   return (
     <View style={styles.container}>
-      <Button title="Clear Bookmarks" onPress={clearBookmarks} />
+      <TouchableOpacity style={styles.button} onPress={clearBookmarks}>
+        <Text style={styles.buttonText}>Clear Bookmarks</Text>
+      </TouchableOpacity>
       <FlatList
         data={bookmarkedRepos}
         renderItem={renderItem}
@@ -53,7 +55,6 @@ export default function Tab() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 15,
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -62,5 +63,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  button: {
+    backgroundColor: '#007bff', 
+    borderRadius: 5, 
+    paddingVertical: 10, 
+    paddingHorizontal: 20, 
+    marginVertical: 20, 
+    zIndex: 10,
+  },
+  buttonText: {
+    color: 'white', 
+    fontSize: 16,
+    textAlign: 'center', 
   },
 });

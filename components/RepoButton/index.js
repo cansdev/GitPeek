@@ -24,7 +24,7 @@ const RepoButton = ({user}) => {
         >
             <View style={styles.container}>
                 <Text style={styles.repoButtonText}> Repositories </Text>
-                <Icon name="chevron-right" size={20} color="black" />
+                <Icon name="chevron-right" size={30} color="white" />
             </View> 
         </TouchableOpacity>
 
@@ -34,7 +34,7 @@ const RepoButton = ({user}) => {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
-        backgroundColor: '#ced4de',
+        backgroundColor: '#697891',
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#bda9a8',
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
     },
 
     repoButtonText: {
+        color: 'white',
         fontSize: 30,
     }
 

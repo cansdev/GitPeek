@@ -83,7 +83,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
             {repoName}
           </Text>
           <TouchableOpacity onPress={toggleBookmark} style={styles.bookmarkIcon}>
-            <Icon name={bookmarked ? 'bookmark' : 'bookmark-o'} size={25} color={bookmarked ? 'black' : 'black'} />
+            <Icon name={bookmarked ? 'bookmark' : 'bookmark-o'} size={30} color={bookmarked ? 'white' : 'white'} />
           </TouchableOpacity>
         </View>
         <Text style={styles.repoStars}>
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#ccc',
-    width: 300,
+    width: 350,
     height: 150,
     padding: 10,
     marginVertical: 10,
