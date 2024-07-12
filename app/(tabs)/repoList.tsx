@@ -33,11 +33,11 @@ const Tab = ({ }: any) => {
       try {
         setLoading(true); 
        
-        const response = await axios.get(`https://api.github.com/users/${user.login}/repos`, {
-          headers: {
-            Authorization: `token ${token}`
-          }
-        });
+        const response = await axios.get(`https://api.github.com/users/${user.login}/repos`, 
+          //headers: {
+            //Authorization: `token ${token}`
+          //}
+        );
 
         setRepoData(response.data);
         setLoading(false);
@@ -63,8 +63,8 @@ const Tab = ({ }: any) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        {loading ? (
+      <ScrollView contentContainerStyle={[styles.scrollView, { paddingBottom: 20 }]}>
+      {loading ? (
           <ActivityIndicator size="large" color="#0000ff" />
         ) : (
           repoData.map((repo) => (

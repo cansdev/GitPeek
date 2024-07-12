@@ -53,11 +53,12 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-start'
   },
+
   scrollView: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });

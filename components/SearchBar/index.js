@@ -35,11 +35,11 @@ const SearchBar = () => {
         setError(null);
 
         timer = setTimeout(async () => {
-          const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`, {
-            headers: {
-              Authorization: `token ${token}`
-            }
-          });
+          const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`
+            //headers: {
+              //Authorization: `token ${token}`
+            //}
+          );
           setUserData(response.data.items);
         }, 500);
         //Use a debounce method for handling API Rate Limiters (x-headers)
@@ -64,7 +64,7 @@ const SearchBar = () => {
   const handleEnterText = (text) => {
     setEnterText(text);
   };
-  //debounce
+  //debounce works
   return (
     <View style={styles.container}>
       <TextInput
@@ -78,8 +78,7 @@ const SearchBar = () => {
       {error && <Text style={styles.errorText}>{error}</Text>}
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
-        keyboardShouldPersistTaps="handled"
-      >
+        keyboardShouldPersistTaps="handled"      >
         {userData &&
           userData.map((user) => (
             <TouchableOpacity key={user.id} onPress={() => handleUserPress(user)}>
@@ -115,9 +114,10 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     alignItems: 'center',
+    paddingBottom: 130,
   },
   loadingIndicator: {
-    marginTop: 20,
+    marginTop: 40,
   },
   errorText: {
     marginTop: 20,
