@@ -20,7 +20,8 @@ export default function Tab() {
 
    useFocusEffect(
     useCallback(() => {
-     setBookmarkedRepos(bookmarks);
+      const sortedBookmarks = [...bookmarks].sort((a,b) => (b.stars || 0) - (a.stars || 0));
+      setBookmarkedRepos(sortedBookmarks);
      console.log('Bookmarks from context:', bookmarks);
     }, [bookmarks])
   );

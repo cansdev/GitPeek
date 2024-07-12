@@ -36,8 +36,9 @@ const RepoCard: React.FC<RepoCardProps> = ({
 
   const adjustFontSize = useCallback((text: string, containerWidth: number, setTextFontSize: React.Dispatch<React.SetStateAction<number>>) => {
     let fontSize = 16;
+    const minFontSize = 12;
 
-    while (fontSize > 10 && TextWidth(text, fontSize) > containerWidth) {
+    while (fontSize > minFontSize && TextWidth(text, fontSize) > containerWidth) {
       fontSize -= 1;
     }
 
@@ -92,7 +93,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
         <Text
           style={[styles.repoDesc, { fontSize: repoDescFontSize }]}
           onLayout={handleTextLayout(repoDesc, setRepoDescFontSize)}
-          numberOfLines={5}
+          numberOfLines={4}
         >
           {repoDesc}
         </Text>
