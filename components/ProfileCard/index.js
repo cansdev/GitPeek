@@ -25,7 +25,6 @@ const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing, userBi
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
       <View style={[styles.container, { backgroundColor: color || '#495569' }]}>
         <View style={styles.profileContainer}>
           <Image source={{ uri: avatarUrl }} style={styles.profileImage} />
@@ -62,7 +61,6 @@ const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing, userBi
           </Text>
         </View>
       </View>
-    </ScrollView>
   );
 };
 
@@ -89,7 +87,7 @@ const styles = StyleSheet.create({
 
   profileContainer: {
     width: '100%',
-    height: 200, 
+    height: 300, 
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -129,10 +127,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
 
-  scrollView: {
-    flexGrow: 1,
-    alignItems: 'center',
-  }
+ 
 });
 
 export default ProfileCard;
