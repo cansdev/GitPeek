@@ -27,12 +27,12 @@ export default function Tab() {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://api.github.com/users/${user.login}`,
-          {
-            headers: {
-              Authorization: `token ${token}`
-            }
-          }
+        const response = await axios.get(`https://api.github.com/users/${user.login}`
+          //{
+            //headers: {
+              //Authorization: `token ${token}`
+            //}
+          //}
         );
         
         setUserData(response.data);
