@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 
 
-const RepoButton = ({user}) => {
+const RepoButton = ({user, color}) => {
 
     const handleRepoPress = () => {
         console.log(user.login + ' repositories')
@@ -22,7 +22,7 @@ const RepoButton = ({user}) => {
         style={styles.repoButton}
         onPress={() => handleRepoPress({user})}
         >
-            <View style={styles.container}>
+            <View style={[styles.container, {backgroundColor: color || '#495569' }]}>
                 <Text style={styles.repoButtonText}> Repositories </Text>
                 <Icon name="chevron-right" size={30} color="white" />
             </View> 

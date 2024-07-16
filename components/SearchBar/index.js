@@ -7,22 +7,24 @@ import { router } from 'expo-router';
 
 const token = Constants.expoConfig?.extra?.apiKey;
 
-
 const SearchBar = () => {
   const [enterText, setEnterText] = useState('');
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [animation] = useState(new Animated.Value(25));
+  const [selectedColor, setSelectedColor] = useState(null); 
 
-  const handleUserPress = (user) => {
-    console.log(user.login)
+  const handleUserPress = (user, color) => {
+    console.log(user.login);
+    setSelectedColor(color);
     router.navigate({
       pathname: './userProfile',
       params: {
         login: user.login,
+        color: color
       }
-    })
+    });
   };
 
   useEffect(() => {
@@ -47,7 +49,6 @@ const SearchBar = () => {
           );
           setUserData(response.data.items);
         }, 500);
-        //Use a debounce method for handling API Rate Limiters (x-headers)
       } catch (error) {
         console.error('Fetching github users error: ', error);
         if (error.response && error.response.status === 403) {
@@ -62,7 +63,6 @@ const SearchBar = () => {
     };
 
     fetchData();
-    //console.log(`API key: ${token}`);
 
     return () => clearTimeout(timer);
   }, [enterText]);
@@ -70,7 +70,6 @@ const SearchBar = () => {
   const handleEnterText = (text) => {
     setEnterText(text);
   };
-  //debounce works
 
   const handleFocus = () => {
     Animated.timing(animation, {
@@ -83,7 +82,7 @@ const SearchBar = () => {
   const handleBlur = () => {
     Animated.timing(animation, {
       toValue: 25,
-      Animation: 300,
+      duration: 300,
       useNativeDriver: false,
     }).start();
   };
@@ -96,7 +95,7 @@ const SearchBar = () => {
   const marginRight = animation.interpolate({
     inputRange: [10, 25],
     outputRange: [10, 25],
-  })
+  });
 
   return (
     <View style={styles.container}>
@@ -118,16 +117,20 @@ const SearchBar = () => {
         keyboardShouldPersistTaps="handled"
       >
         {userData &&
-          userData.map((user, index) => (
-            <TouchableOpacity key={user.id} onPress={() => handleUserPress(user)}>
-              <UserCard
-                username={user.login}
-                userAddress={user.html_url}
-                avatarUrl={user.avatar_url}
-                index={index}
-              />
-            </TouchableOpacity>
-          ))}
+          userData.map((user, index) => {
+            const backgroundColors = ['#b47ec2', '#c95e57', '#65baa8', '#5acc6d', '#c9d46e'];
+            const backgroundColor = backgroundColors[index % backgroundColors.length];
+            return (
+              <TouchableOpacity key={user.id} onPress={() => handleUserPress(user, backgroundColor)}>
+                <UserCard
+                  username={user.login}
+                  userAddress={user.html_url}
+                  avatarUrl={user.avatar_url}
+                  index={index}
+                />
+              </TouchableOpacity>
+            );
+          })}
       </ScrollView>
     </View>
   );
@@ -174,4 +177,3 @@ const styles = StyleSheet.create({
 });
 
 export default SearchBar;
-

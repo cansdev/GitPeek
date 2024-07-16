@@ -1,41 +1,46 @@
-import { View, Text, StyleSheet, ActivityIndicator, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import ProfileCard from '@/components/ProfileCard/index';
-import { Key, useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import RepoButton from '@/components/RepoButton/index';
 import Constants from 'expo-constants';
 
-
 const token = Constants.expoConfig?.extra?.apiKey;
 
-export default function Tab({ }: any) {
+export default function Tab() {
   const [loading, setLoading] = useState(true);
-
   const [userData, setUserData] = useState({
     id: '',
     login: '',
     followers: 0,
     following: 0,
-    avatar_url: ''
+    avatar_url: '',
+    bio: ''
   });
+  const [color, setColor] = useState<string>('#495569'); 
+
   const user = useLocalSearchParams();
 
   useEffect(() => {
     const fetchUserData = async () => {
-
       try {
         setLoading(true);
         const response = await axios.get(`https://api.github.com/users/${user.login}`
           //{
-              //headers: {
-                //Authorization: `token ${token}`
-              //}
+            //headers: {
+              //Authorization: `token ${token}`
             //}
+          //}
         );
         
-        //bad practice
         setUserData(response.data);
+        if (typeof user.color === 'string') {
+          setColor(user.color);
+        } 
+        else {
+          setColor('#495569');
+        }       
         setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -43,8 +48,7 @@ export default function Tab({ }: any) {
       }
     };
     fetchUserData();
-    //console.log(`API key: ${token}`);
-  }, [user.login]);
+  }, [user.login, user.color]);
 
   return (
     <View style={styles.container}>
@@ -58,8 +62,10 @@ export default function Tab({ }: any) {
             userFollowers={userData.followers}
             userFollowing={userData.following}
             avatarUrl={userData.avatar_url}
+            userBio={userData.bio}
+            color={color} 
           />
-          <RepoButton user={user}/>
+          <RepoButton user={user} color={color}/>
         </>
       ) : null}
     </View>
