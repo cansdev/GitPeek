@@ -1,28 +1,7 @@
 import React, { useState } from 'react';
 import { Text, View, Image, StyleSheet, Platform, ScrollView } from 'react-native';
 
-const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing, userBio, color }) => {
-
-  const [followersFontSize, setFollowersFontSize] = useState(30); 
-  const [followingFontSize, setFollowingFontSize] = useState(30); 
-
-  const handleTextLayout = (text, setTextFontSize) => (event) => {
-    const { width } = event.nativeEvent.layout;
-    let fontSize = 30; 
-
-    const textString = String(text);
-
-    while (fontSize > 12 && TextWidth(textString, fontSize) > width) {
-      fontSize -= 1;
-    }
-    
-    setTextFontSize(fontSize);
-  };
-
-  const TextWidth = (text, fontSize) => {
-    const width = text.length * (fontSize * 0.6);
-    return width;
-  };
+const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing, userBio, userRepos, color }) => {
 
   return (
       <View style={[styles.container, { backgroundColor: color || '#495569' }]}>
@@ -43,18 +22,23 @@ const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing, userBi
           >
             {userBio}
           </Text>
+
+          <Text 
+            style={[styles.userRepos,  {fontSize: 30} ]}
+            numberOfLines={1}
+          >
+            Repos: {userRepos}
+          </Text>
           
           <Text 
-            style={[styles.userFollowers, { fontSize: followersFontSize }]}
-            onLayout={handleTextLayout(userFollowers, setFollowersFontSize)}
+            style={[styles.userFollowers, { fontSize: 30 }]}
             numberOfLines={1}
           >
             Followers: {userFollowers}
           </Text>
 
           <Text
-            style={[styles.userFollowing, { fontSize: followingFontSize }]}
-            onLayout={handleTextLayout(userFollowing, setFollowingFontSize)}
+            style={[styles.userFollowing, { fontSize: 30}]}
             numberOfLines={1}
           >
             Following: {userFollowing}
@@ -126,6 +110,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingBottom: 15,
   },
+
+  userRepos: {
+    color: 'white',
+  }
 
  
 });

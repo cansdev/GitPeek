@@ -4,6 +4,7 @@ import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator, Text, Touch
 import axios from 'axios';
 import UserCard from '../UserCard';
 import { router } from 'expo-router';
+import Icon from 'react-native-vector-icons/MaterialIcons'; 
 
 const token = Constants.expoConfig?.extra?.apiKey;
 
@@ -13,7 +14,7 @@ const SearchBar = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [animation] = useState(new Animated.Value(25));
-  const [selectedColor, setSelectedColor] = useState(null); 
+  const [selectedColor, setSelectedColor] = useState(null);
 
   const handleUserPress = (user, color) => {
     console.log(user.login);
@@ -88,27 +89,30 @@ const SearchBar = () => {
   };
 
   const marginLeft = animation.interpolate({
-    inputRange: [10, 25],
-    outputRange: [10, 25],
+    inputRange: [5, 25],
+    outputRange: [5, 25],
   });
 
   const marginRight = animation.interpolate({
-    inputRange: [10, 25],
-    outputRange: [10, 25],
+    inputRange: [5, 25],
+    outputRange: [5, 25],
   });
 
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.animatedContainer, { marginLeft, marginRight }]}>
-        <TextInput
-          style={styles.input}
-          placeholder="Search for a profile.."
-          value={enterText}
-          onChangeText={handleEnterText}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          autoCapitalize="none"
-        />
+        <View style={styles.inputContainer}>
+          <Icon name="search" size={24} color="#999" style={styles.icon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Search for a profile.."
+            value={enterText}
+            onChangeText={handleEnterText}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            autoCapitalize="none"
+          />
+        </View>
       </Animated.View>
       {loading && <ActivityIndicator style={styles.loadingIndicator} size="large" color="#0000ff" />}
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -139,27 +143,37 @@ const SearchBar = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    zIndex: 10,
   },
   animatedContainer: {
     flexDirection: 'column',
     marginTop: 20,
   },
-  input: {
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 20,
-    fontSize: 25,
-    height: 65,
-    width: '100%',
     borderColor: '#d6d2c5',
     borderWidth: 2,
+    height: 65,
+    width: '100%',
     paddingHorizontal: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.9,
     shadowRadius: 3,
     elevation: 5,
-    zIndex: 10,
+    position: 'relative', 
+  },
+  icon: {
+    position: 'absolute',
+    left: 15,
+  },
+  input: {
+    fontSize: 25,
+    height: '100%',
+    flex: 1,
+    paddingLeft: 45, 
   },
   scrollViewContent: {
     alignItems: 'center',

@@ -16,6 +16,7 @@ export default function Tab() {
     followers: 0,
     following: 0,
     avatar_url: '',
+    public_repos: 0,
     bio: ''
   });
   const [color, setColor] = useState<string>('#495569'); 
@@ -64,6 +65,7 @@ export default function Tab() {
               userFollowing={userData.following}
               avatarUrl={userData.avatar_url}
               userBio={userData.bio}
+              userRepos={userData.public_repos}
               color={color} 
             />
             <View style={styles.repoButtonContainer}>
