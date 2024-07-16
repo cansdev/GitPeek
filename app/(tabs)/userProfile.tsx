@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import ProfileCard from '@/components/ProfileCard/index';
 import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
@@ -26,12 +26,12 @@ export default function Tab() {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://api.github.com/users/${user.login}`
-          //{
-            //headers: {
-              //Authorization: `token ${token}`
-            //}
-          //}
+        const response = await axios.get(`https://api.github.com/users/${user.login}`,
+          {
+            headers: {
+              Authorization: `token ${token}`
+            }
+          }
         );
         
         setUserData(response.data);
@@ -51,24 +51,28 @@ export default function Tab() {
   }, [user.login, user.color]);
 
   return (
-    <View style={styles.container}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : userData ? (
-        <>
-          <ProfileCard
-            key={userData.id}
-            username={userData.login}
-            userFollowers={userData.followers}
-            userFollowing={userData.following}
-            avatarUrl={userData.avatar_url}
-            userBio={userData.bio}
-            color={color} 
-          />
-          <RepoButton user={user} color={color}/>
-        </>
-      ) : null}
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        {loading ? (
+          <ActivityIndicator size="large" color="#0000ff" />
+        ) : userData ? (
+          <>
+            <ProfileCard
+              key={userData.id}
+              username={userData.login}
+              userFollowers={userData.followers}
+              userFollowing={userData.following}
+              avatarUrl={userData.avatar_url}
+              userBio={userData.bio}
+              color={color} 
+            />
+            <View style={styles.repoButtonContainer}>
+              <RepoButton user={user} color={color} />
+            </View>
+          </>
+        ) : null}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -77,5 +81,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 15,
     alignItems: 'center',
+  },
+  repoButtonContainer: {
+    marginVertical: 20, 
+    width: '100%', 
+    alignItems: 'center', 
   },
 });

@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Text, View, Image, StyleSheet, Platform, ScrollView } from 'react-native';
 
 const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing, userBio, color }) => {
 
-  const [followersFontSize, setFollowersFontSize] = useState();
-  const [followingFontSize, setFollowingFontSize] = useState();
+  const [followersFontSize, setFollowersFontSize] = useState(30); 
+  const [followingFontSize, setFollowingFontSize] = useState(30); 
 
   const handleTextLayout = (text, setTextFontSize) => (event) => {
     const { width } = event.nativeEvent.layout;
@@ -16,54 +16,53 @@ const ProfileCard = ({ username, avatarUrl, userFollowers, userFollowing, userBi
       fontSize -= 1;
     }
     
-    setFollowersFontSize(fontSize);
-    setFollowingFontSize(fontSize);
+    setTextFontSize(fontSize);
   };
 
   const TextWidth = (text, fontSize) => {
-
     const width = text.length * (fontSize * 0.6);
     return width;
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: color || '#495569' }]}>
-      <View style={styles.profileContainer}>
-        <Image source={{ uri: avatarUrl }} style={styles.profileImage} />
-      </View>
-      <View style={styles.textLayout}>
-        <Text
-          style={[styles.username, { fontSize: 40 }]}
-          numberOfLines={1}
-        >
-          {username}
-        </Text>
+    <ScrollView contentContainerStyle={styles.scrollView}>
+      <View style={[styles.container, { backgroundColor: color || '#495569' }]}>
+        <View style={styles.profileContainer}>
+          <Image source={{ uri: avatarUrl }} style={styles.profileImage} />
+        </View>
+        <View style={styles.textLayout}>
+          <Text
+            style={[styles.username, { fontSize: 40 }]}
+            numberOfLines={1}
+          >
+            {username}
+          </Text>
 
-        <Text 
-          style={[styles.userBio,  {fontSize: 18} ]}
-          numberOfLines={3}
-        >
-          {userBio}
-        </Text>
-        
-        <Text 
-          style={[styles.userFollowers, { fontSize: followersFontSize }]}
-          onLayout={handleTextLayout(userFollowers, setFollowersFontSize)}
-          numberOfLines={1}
-        >
-          Followers: {userFollowers}
-        </Text>
+          <Text 
+            style={[styles.userBio,  {fontSize: 18} ]}
+            numberOfLines={3}
+          >
+            {userBio}
+          </Text>
+          
+          <Text 
+            style={[styles.userFollowers, { fontSize: followersFontSize }]}
+            onLayout={handleTextLayout(userFollowers, setFollowersFontSize)}
+            numberOfLines={1}
+          >
+            Followers: {userFollowers}
+          </Text>
 
-        <Text
-          style={[styles.userFollowing, { fontSize: followingFontSize }]}
-          onLayout={handleTextLayout(userFollowing, setFollowingFontSize)}
-          numberOfLines={1}
-        >
-          Following: {userFollowing}
-        </Text>
+          <Text
+            style={[styles.userFollowing, { fontSize: followingFontSize }]}
+            onLayout={handleTextLayout(userFollowing, setFollowingFontSize)}
+            numberOfLines={1}
+          >
+            Following: {userFollowing}
+          </Text>
+        </View>
       </View>
-    </View>
-    
+    </ScrollView>
   );
 };
 
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
 
   profileContainer: {
     width: '100%',
-    height: '60%', 
+    height: 200, 
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
@@ -128,6 +127,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     paddingBottom: 15,
+  },
+
+  scrollView: {
+    flexGrow: 1,
+    alignItems: 'center',
   }
 });
 
