@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { Text, View, Image, StyleSheet, Platform } from 'react-native';
 
-const UserCard = ({ username, userAddress, avatarUrl }) => {
-  const [usernameFontSize, setUsernameFontSize] = useState(30);
+const UserCard = ({ username, userAddress, avatarUrl, index }) => {
+  const [usernameFontSize, setUsernameFontSize] = useState(27);
   const [addressFontSize, setAddressFontSize] = useState(20);
+
+  const backgroundColors = ['#b47ec2', '#c95e57', '#65baa8', '#5acc6d', '#c9d46e'];
+
+  const backgroundColor = backgroundColors[index % backgroundColors.length];
 
   const handleTextLayout = (text, setTextFontSize) => (event) => {
     const { width } = event.nativeEvent.layout;
-    let fontSize = 30; 
+    let fontSize = 30;
 
     const textString = String(text);
 
@@ -19,21 +23,19 @@ const UserCard = ({ username, userAddress, avatarUrl }) => {
   };
 
   const TextWidth = (text, fontSize) => {
-
     const width = text.length * (fontSize * 0.6);
     return width;
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor }]}>
       <View style={styles.profileContainer}>
         <Image source={{ uri: avatarUrl }} style={styles.profileImage} />
       </View>
       <View style={styles.textLayout}>
         <Text
           style={[styles.username, { fontSize: usernameFontSize }]}
-          onLayout={handleTextLayout(username, setUsernameFontSize)}
-          numberOfLines={1}
+          numberOfLines={2}
         >
           {username}
         </Text>
@@ -51,14 +53,12 @@ const UserCard = ({ username, userAddress, avatarUrl }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#495569',
-    borderRadius: 15,
-    borderWidth: 1,
+    borderRadius: 25,
     borderColor: '#bda9a8',
     flexDirection: 'row',
-    alignItems: 'baseline',
-    width: '90%',
-    padding: 10,
+    alignItems: 'center',
+    width: 400,
+    height: 200,
     marginVertical: 15,
     ...Platform.select({
       ios: {
@@ -74,32 +74,36 @@ const styles = StyleSheet.create({
   },
 
   profileContainer: {
-    marginRight: 35,
+    width: '50%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
 
   profileImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 25,
+    width: '100%',
+    height: '100%',
+    borderTopLeftRadius: 25,
+    borderBottomLeftRadius: 25,
   },
 
   textLayout: {
-    flexDirection: 'column',
-    flex: 1,
-    paddingVertical: 15,
-    justifyContent: 'flex-end',
+    width: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   username: {
     color: 'white',
-    paddingBottom: 25,
+    paddingBottom: 10,
     fontWeight: 'bold',
   },
 
   userAddress: {
-    paddingBottom: 5,
     color: 'white',
   },
+
 });
 
 export default UserCard;

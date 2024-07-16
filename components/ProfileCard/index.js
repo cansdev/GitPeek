@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
     width: '90%',
     padding: 10,
-    marginVertical: 15,
+    marginVertical: 15, 
     ...Platform.select({
       ios: {
         shadowColor: 'black',

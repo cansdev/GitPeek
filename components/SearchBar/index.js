@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Constants from 'expo-constants';
-import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator, Text, TouchableOpacity, Animated } from 'react-native';
 import axios from 'axios';
 import UserCard from '../UserCard';
 import { router } from 'expo-router';
@@ -13,13 +13,14 @@ const SearchBar = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [animation] = useState(new Animated.Value(25));
 
   const handleUserPress = (user) => {
     console.log(user.login)
     router.navigate({
       pathname: './userProfile',
       params: {
-        login: user.login
+        login: user.login,
       }
     })
   };
@@ -70,28 +71,60 @@ const SearchBar = () => {
     setEnterText(text);
   };
   //debounce works
+
+  const handleFocus = () => {
+    Animated.timing(animation, {
+      toValue: 10,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const handleBlur = () => {
+    Animated.timing(animation, {
+      toValue: 25,
+      Animation: 300,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const marginLeft = animation.interpolate({
+    inputRange: [10, 25],
+    outputRange: [10, 25],
+  });
+
+  const marginRight = animation.interpolate({
+    inputRange: [10, 25],
+    outputRange: [10, 25],
+  })
+
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search for a profile.."
-        value={enterText}
-        onChangeText={handleEnterText}
-        autoCapitalize="none"
-      />
+      <Animated.View style={[styles.animatedContainer, { marginLeft, marginRight }]}>
+        <TextInput
+          style={styles.input}
+          placeholder="Search for a profile.."
+          value={enterText}
+          onChangeText={handleEnterText}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          autoCapitalize="none"
+        />
+      </Animated.View>
       {loading && <ActivityIndicator style={styles.loadingIndicator} size="large" color="#0000ff" />}
       {error && <Text style={styles.errorText}>{error}</Text>}
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
-        keyboardShouldPersistTaps="handled"      >
+        keyboardShouldPersistTaps="handled"
+      >
         {userData &&
-          userData.map((user) => (
+          userData.map((user, index) => (
             <TouchableOpacity key={user.id} onPress={() => handleUserPress(user)}>
               <UserCard
-                key={user.id}
                 username={user.login}
                 userAddress={user.html_url}
                 avatarUrl={user.avatar_url}
+                index={index}
               />
             </TouchableOpacity>
           ))}
@@ -103,10 +136,11 @@ const SearchBar = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    marginRight: 10,
-    marginLeft: 10,
-    marginTop: 20,
     zIndex: 10,
+  },
+  animatedContainer: {
+    flexDirection: 'column',
+    marginTop: 20,
   },
   input: {
     backgroundColor: 'white',
@@ -119,7 +153,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.9,
     shadowRadius: 3,
     elevation: 5,
     zIndex: 10,
