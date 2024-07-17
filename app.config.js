@@ -1,6 +1,6 @@
 export default {
   expo: {
-    name: "github-mobile",
+    name: "GitPeek",
     slug: "github-mobile",
     version: "1.0.0",
     orientation: "portrait",
@@ -13,7 +13,8 @@ export default {
       backgroundColor: "#0F0E2E"
     },
     ios: {
-      supportsTablet: true
+      supportsTablet: true,
+      bundleIdentifier: "com.anonymous.githubmobile"
     },
     android: {
       adaptiveIcon: {
