@@ -38,7 +38,6 @@ export default {
       typedRoutes: true
     },
     extra: {
-      apiKey: process.env.EXPO_PUBLIC_API_KEY, // API key from environment variable
       router: {
         origin: false
       },

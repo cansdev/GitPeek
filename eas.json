@@ -6,6 +6,7 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
+      
       "android" : {
         "buildType": "apk"
       }
@@ -15,8 +16,11 @@
     },
     "production": {
       "android": {
-        "buildType": "apk" 
-      }
+        "buildType": "apk"
+      },
+      "env" : {
+          "EXPO_PUBLIC_API_KEY": "process.env.EXPO_PUBLIC_API_KEY"
+        }
     }
   },
   "submit": {

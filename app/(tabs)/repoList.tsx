@@ -21,7 +21,7 @@ interface Repo {
     bookmarked: number;
   }
   
-const token = Constants.expoConfig?.extra?.apiKey;
+const token = process.env.EXPO_PUBLIC_API_KEY;
 
 const Tab = ({ }: any) => {
   const [repoData, setRepoData] = useState<Repo[]>([]);
@@ -37,11 +37,11 @@ const Tab = ({ }: any) => {
         setLoading(true); 
        
         const response = await axios.get(`https://api.github.com/users/${user.login}/repos`, 
-          //{
-              //headers: {
-                //Authorization: `token ${token}`
-              //}
-            //}
+          {
+              headers: {
+                Authorization: `token ${token}`
+              }
+            }
         
         );
 

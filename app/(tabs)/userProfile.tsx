@@ -6,7 +6,7 @@ import axios from 'axios';
 import RepoButton from '@/components/RepoButton/index';
 import Constants from 'expo-constants';
 
-const token = Constants.expoConfig?.extra?.apiKey;
+const token = process.env.EXPO_PUBLIC_API_KEY;
 
 export default function Tab() {
   const [loading, setLoading] = useState(true);
@@ -27,12 +27,12 @@ export default function Tab() {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://api.github.com/users/${user.login}`
-          //{
-            //headers: {
-              //Authorization: `token ${token}`
-            //}
-          //}
+        const response = await axios.get(`https://api.github.com/users/${user.login}`,
+          {
+            headers: {
+              Authorization: `token ${token}`
+            }
+          }
         );
         
         setUserData(response.data);

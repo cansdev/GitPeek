@@ -6,7 +6,7 @@ import UserCard from '../UserCard';
 import { router } from 'expo-router';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
 
-const token = Constants.expoConfig?.extra?.apiKey;
+const token = process.env.EXPO_PUBLIC_API_KEY;
 
 const SearchBar = () => {
   const [enterText, setEnterText] = useState('');
@@ -29,6 +29,7 @@ const SearchBar = () => {
   };
 
   useEffect(() => {
+    console.log(token);
     let timer;
     const fetchData = async () => {
       if (!enterText.trim()) {
@@ -41,12 +42,12 @@ const SearchBar = () => {
         setError(null);
 
         timer = setTimeout(async () => {
-          const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`
-            //{
-              //headers: {
-                //Authorization: `token ${token}`
-              //}
-            //}
+          const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`,
+            {
+              headers: {
+                Authorization: `token ${token}`
+              }
+            }
           );
           setUserData(response.data.items);
         }, 500);
