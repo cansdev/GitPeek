@@ -4,21 +4,21 @@ export default {
     slug: "github-mobile",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/images/icon.png",
+    icon: "./assets/images/GitPeekIcon.png",
     scheme: "githubmobile",
     userInterfaceStyle: "automatic",
     splash: {
-      image: "./assets/images/splash.png",
+      image: "./assets/images/GitPeekIcon.png",
       resizeMode: "contain",
-      backgroundColor: "#ffffff"
+      backgroundColor: "#0F0E2E"
     },
     ios: {
       supportsTablet: true
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/adaptive-icon.png",
-        backgroundColor: "#ffffff"
+        foregroundImage: "./assets/images/GitPeekIcon.png",
+        backgroundColor: "#0F0E2E"
       },
       package: "com.anonymous.githubmobile",
       networkSecurityConfig: {
