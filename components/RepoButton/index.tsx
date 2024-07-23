@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { router } from 'expo-router';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import styles from './styles';
 
 interface RepoButtonProps {
   user: {
@@ -34,26 +35,5 @@ const RepoButton: React.FC<RepoButtonProps> = ({ user, color }) => {
     </TouchableOpacity>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 10,
-    backgroundColor: '#697891',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#bda9a8',
-    flexDirection: 'row',
-  },
-  repoButton: {
-    width: '80%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  repoButtonText: {
-    color: 'white',
-    fontSize: 30,
-  },
-});
 
 export default RepoButton;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
+import styles from './styles';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -40,18 +41,5 @@ const Splash: React.FC = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0f0a2f', 
-  },
-  logo: {
-    width: 150, 
-    height: 150, 
-  },
-});
 
 export default Splash;
