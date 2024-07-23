@@ -19,7 +19,8 @@
         "buildType": "apk"
       },
       "env" : {
-          "EXPO_PUBLIC_API_KEY": "process.env.EXPO_PUBLIC_API_KEY"
+          "EXPO_PUBLIC_API_KEY": "process.env.EXPO_PUBLIC_API_KEY",
+          "EXPO_API_KEY": "process.env.EXPO_API_KEY"
         }
     }
   },

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Text, View, StyleSheet, Platform, TouchableOpacity, LayoutChangeEvent } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useBookmarks } from '@/context/BookmarkContext';
 
 interface RepoCardProps {
@@ -10,16 +9,7 @@ interface RepoCardProps {
     repoStars?: number;
     repoId?: number;
     bookmarked?: boolean; 
-  }
-
-/*
-interface Bookmark {
-    id: number;
-    name: string;
-    stars?: number;
-    description: string;
 }
-*/
 
 const RepoCard: React.FC<RepoCardProps> = ({
   repoName,
@@ -32,7 +22,7 @@ const RepoCard: React.FC<RepoCardProps> = ({
   const [repoNameFontSize, setRepoNameFontSize] = useState<number>(18);
   const [bookmarked, setBookmarked] = useState<boolean>(initialBookmarked);
 
-  const {addBookmark, removeBookmark } = useBookmarks();
+  const { addBookmark, removeBookmark } = useBookmarks();
 
   const adjustFontSize = useCallback((text: string, containerWidth: number, setTextFontSize: React.Dispatch<React.SetStateAction<number>>) => {
     let fontSize = 16;
@@ -84,11 +74,11 @@ const RepoCard: React.FC<RepoCardProps> = ({
             {repoName}
           </Text>
           <TouchableOpacity onPress={toggleBookmark} style={styles.bookmarkIcon}>
-            <Icon name={bookmarked ? 'bookmark' : 'bookmark-o'} size={30} color={bookmarked ? 'white' : 'white'} />
+            <Icon name={bookmarked ? 'bookmark' : 'bookmark-o'} size={30} color={bookmarked ? '#FFD700' : '#C0C0C0'} />
           </TouchableOpacity>
         </View>
         <Text style={styles.repoStars}>
-          {repoStars !== undefined ? `Stars: ${repoStars}` : 'Stars: 0'}
+          {repoStars !== undefined ? `⭐ ${repoStars}` : '⭐ 0'}
         </Text>
         <Text
           style={[styles.repoDesc, { fontSize: repoDescFontSize }]}
@@ -147,14 +137,16 @@ const styles = StyleSheet.create({
     color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.5)', 
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,    fontSize: 14,
+    textShadowRadius: 3,
+    fontSize: 14,
     marginBottom: 5,
   },
   repoDesc: {
     color: 'white',
     textShadowColor: 'rgba(0, 0, 0, 0.5)', 
     textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,    fontSize: 14,
+    textShadowRadius: 3,
+    fontSize: 14,
   },
   bookmarkIcon: {
     padding: 5,

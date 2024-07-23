@@ -24,9 +24,10 @@ export default function TabLayout() {
       }
       }}>
       <Tabs.Screen
-        name="index"
+        name="search"
         options={{
           title: 'GitHub',
+          headerShown: false,
           headerTitleAlign: 'center',
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="search" color={color} />,
           tabBarLabel: 'Search',

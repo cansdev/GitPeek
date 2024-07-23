@@ -1,12 +1,10 @@
-import {useState, useEffect, useCallback} from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import SearchBar from '@/components/SearchBar/index'
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.preventAutoHideAsync();
 
-export default function Tab() {
-
+const Splash: React.FC = () => {
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
@@ -23,7 +21,6 @@ export default function Tab() {
     prepare();
   }, []);
 
-
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
       await SplashScreen.hideAsync();
@@ -31,28 +28,30 @@ export default function Tab() {
   }, [appIsReady]);
 
   if (!appIsReady) {
-    return null;
+    return null; 
   }
 
   return (
-    <View 
-    style={styles.container}
-    onLayout={onLayoutRootView}>
-      <SearchBar />
+    <View style={styles.container} onLayout={onLayoutRootView}>
+      <Image
+        source={require('@/assets/images/GitPeekIcon.png')} 
+        style={styles.logo}
+      />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#0f0a2f', 
   },
-
-  userCardsLayout: {
-    paddingVertical: 80,
-    marginLeft: 20,
-    width: '100%',
+  logo: {
+    width: 150, 
+    height: 150, 
   },
-
-  
-  
 });
+
+export default Splash;

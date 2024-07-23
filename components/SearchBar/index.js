@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import Constants from 'expo-constants';
-import { View, TextInput, StyleSheet, ScrollView, ActivityIndicator, Text, TouchableOpacity, Animated } from 'react-native';
+import { View, TextInput, StyleSheet, ActivityIndicator, Text, TouchableOpacity, Animated } from 'react-native';
 import axios from 'axios';
 import UserCard from '../UserCard';
 import { router } from 'expo-router';
 import Icon from 'react-native-vector-icons/MaterialIcons'; 
+import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient from expo-linear-gradient
 
 const token = process.env.EXPO_PUBLIC_API_KEY;
 
@@ -29,7 +29,6 @@ const SearchBar = () => {
   };
 
   useEffect(() => {
-    console.log(token);
     let timer;
     const fetchData = async () => {
       if (!enterText.trim()) {
@@ -102,41 +101,46 @@ const SearchBar = () => {
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.animatedContainer, { marginLeft, marginRight }]}>
-        <View style={styles.inputContainer}>
-          <Icon name="search" size={24} color="#999" style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Search for a profile.."
-            value={enterText}
-            onChangeText={handleEnterText}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            autoCapitalize="none"
-          />
+        <View style={styles.gradientWrapper}>
+          <LinearGradient
+            colors={['#f9f9f9', '#ffffff']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.gradientBackground}
+          >
+            <View style={styles.inputContainer}>
+              <Icon name="search" size={24} color="#333" style={styles.icon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Search for a profile.."
+                placeholderTextColor="#888"
+                value={enterText}
+                onChangeText={handleEnterText}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                autoCapitalize="none"
+              />
+            </View>
+          </LinearGradient>
         </View>
       </Animated.View>
-      {loading && <ActivityIndicator style={styles.loadingIndicator} size="large" color="#0000ff" />}
+      {loading && <ActivityIndicator style={styles.loadingIndicator} size="large" color="#007bff" />}
       {error && <Text style={styles.errorText}>{error}</Text>}
-      <ScrollView
-        contentContainerStyle={styles.scrollViewContent}
-        keyboardShouldPersistTaps="handled"
-      >
-        {userData &&
-          userData.map((user, index) => {
-            const backgroundColors = ['#b47ec2', '#c95e57', '#65baa8', '#5acc6d', '#c9d46e'];
-            const backgroundColor = backgroundColors[index % backgroundColors.length];
-            return (
-              <TouchableOpacity key={user.id} onPress={() => handleUserPress(user, backgroundColor)}>
-                <UserCard
-                  username={user.login}
-                  userAddress={user.html_url}
-                  avatarUrl={user.avatar_url}
-                  index={index}
-                />
-              </TouchableOpacity>
-            );
-          })}
-      </ScrollView>
+      {userData &&
+        userData.map((user, index) => {
+          const backgroundColors = ['#b47ec2', '#c95e57', '#65baa8', '#5acc6d', '#c9d46e'];
+          const backgroundColor = backgroundColors[index % backgroundColors.length];
+          return (
+            <TouchableOpacity key={user.id} onPress={() => handleUserPress(user, backgroundColor)}>
+              <UserCard
+                username={user.login}
+                userAddress={user.html_url}
+                avatarUrl={user.avatar_url}
+                index={index}
+              />
+            </TouchableOpacity>
+          );
+        })}
     </View>
   );
 };
@@ -144,44 +148,51 @@ const SearchBar = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
+    paddingHorizontal: 10, // Ensure there's horizontal padding
   },
   animatedContainer: {
     flexDirection: 'column',
     marginTop: 20,
   },
+  gradientWrapper: {
+    width: '100%',
+    paddingBottom: 5, // Add padding to the bottom to ensure the gradient is not cut off
+  },
+  gradientBackground: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0.5, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5,
+    // Ensure gradient background expands fully to its container's width
+    width: '100%',
+    height: 65, // Adjust height to match input height or desired size
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
     borderRadius: 20,
     borderColor: '#d6d2c5',
-    borderWidth: 2,
-    height: 65,
+    borderWidth: 1,
+    height: '100%',
     width: '100%',
-    paddingHorizontal: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.9,
-    shadowRadius: 3,
-    elevation: 5,
-    position: 'relative', 
+    paddingHorizontal: 15,
+    backgroundColor: 'transparent', // make background transparent for gradient effect
   },
   icon: {
-    position: 'absolute',
-    left: 15,
+    marginHorizontal: 10,
   },
   input: {
-    fontSize: 25,
+    fontSize: 18,
     height: '100%',
     flex: 1,
-    paddingLeft: 45, 
-  },
-  scrollViewContent: {
-    alignItems: 'center',
-    paddingBottom: 130,
+    paddingLeft: 10,
+    color: '#333',
   },
   loadingIndicator: {
-    marginTop: 40,
+    marginTop: 20,
   },
   errorText: {
     marginTop: 20,

@@ -33,7 +33,8 @@ export default {
     },
     plugins: [
       "expo-router",
-      "expo-dev-client"
+      "expo-dev-client",
+      "expo-secure-store"
     ],
     experiments: {
       typedRoutes: true
