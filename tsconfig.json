@@ -11,10 +11,9 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "components/SearchBar/index.js",
-    "components/UserCard/index.js",
-    "components/ProfileCard/ProfileCard.js",
+    "components/SearchBar/index.tsx",
+    "components/UserCard/index.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "components/RepoCard/index.tsx", "components/ProfileCard/index.js", "components/RepoButton/index.js", "components/RepoButton/index.js", "components/RepoButton/index.js", "components/RepoButton/index.js", "components/BackgroundImage/index.js", "components/RegisterPage/index.tsx"  ]
+, "components/RepoCard/index.tsx", "components/ProfileCard/index.tsx", "components/RepoButton/index.tsx", "components/RepoButton/index.tsx", "components/RepoButton/index.tsx", "components/RepoButton/index.tsx", "components/BackgroundImage/index.tsx", "components/RegisterPage/index.tsx"  ]
 }

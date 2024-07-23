@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, ActivityIndicator, Text, TouchableOpacity, Animated } from 'react-native';
-import axios from 'axios';
-import UserCard from '../UserCard';
+import axios, { AxiosError } from 'axios';
+import UserCard from '../UserCard'; 
 import { router } from 'expo-router';
-import Icon from 'react-native-vector-icons/MaterialIcons'; 
-import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient from expo-linear-gradient
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const token = process.env.EXPO_PUBLIC_API_KEY;
 
-const SearchBar = () => {
-  const [enterText, setEnterText] = useState('');
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [animation] = useState(new Animated.Value(25));
-  const [selectedColor, setSelectedColor] = useState(null);
+interface User {
+  id: number;
+  login: string;
+  html_url: string;
+  avatar_url: string;
+}
 
-  const handleUserPress = (user, color) => {
+const SearchBar: React.FC = () => {
+  const [enterText, setEnterText] = useState<string>('');
+  const [userData, setUserData] = useState<User[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [animation] = useState<Animated.Value>(new Animated.Value(25));
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+
+  const handleUserPress = (user: User, color: string) => {
     console.log(user.login);
     setSelectedColor(color);
     router.navigate({
@@ -29,7 +36,7 @@ const SearchBar = () => {
   };
 
   useEffect(() => {
-    let timer;
+    let timer: NodeJS.Timeout;
     const fetchData = async () => {
       if (!enterText.trim()) {
         setUserData(null);
@@ -41,22 +48,32 @@ const SearchBar = () => {
         setError(null);
 
         timer = setTimeout(async () => {
-          const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`,
-            {
+          try {
+            const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`, {
               headers: {
                 Authorization: `token ${token}`
               }
+            });
+            setUserData(response.data.items);
+          } catch (err) {
+            // Check the type of error here
+            if (axios.isAxiosError(err)) {
+              // Type assertion for AxiosError
+              const axiosError = err as AxiosError;
+              if (axiosError.response && axiosError.response.status === 403) {
+                setError('Rate limit exceeded. Please try again later.');
+              } else {
+                setError('Error fetching github users. Please check your network connection.');
+              }
+            } else {
+              setError('Error occurred.');
             }
-          );
-          setUserData(response.data.items);
+            setUserData(null);
+          }
         }, 500);
-      } catch (error) {
-        console.error('Fetching github users error: ', error);
-        if (error.response && error.response.status === 403) {
-          setError('Rate limit exceeded. Please try again later.');
-        } else {
-          setError('Error fetching github users. Please check your network connection.');
-        }
+      } catch (err) {
+        console.error('Error:', err);
+        setError('Error occurred.');
         setUserData(null);
       } finally {
         setLoading(false);
@@ -68,7 +85,7 @@ const SearchBar = () => {
     return () => clearTimeout(timer);
   }, [enterText]);
 
-  const handleEnterText = (text) => {
+  const handleEnterText = (text: string) => {
     setEnterText(text);
   };
 
@@ -148,7 +165,7 @@ const SearchBar = () => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    paddingHorizontal: 10, // Ensure there's horizontal padding
+    paddingHorizontal: 10,
   },
   animatedContainer: {
     flexDirection: 'column',
@@ -156,7 +173,7 @@ const styles = StyleSheet.create({
   },
   gradientWrapper: {
     width: '100%',
-    paddingBottom: 5, // Add padding to the bottom to ensure the gradient is not cut off
+    paddingBottom: 5,
   },
   gradientBackground: {
     borderRadius: 20,
@@ -166,9 +183,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 6,
     elevation: 5,
-    // Ensure gradient background expands fully to its container's width
     width: '100%',
-    height: 65, // Adjust height to match input height or desired size
+    height: 65,
   },
   inputContainer: {
     flexDirection: 'row',
@@ -179,7 +195,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     paddingHorizontal: 15,
-    backgroundColor: 'transparent', // make background transparent for gradient effect
+    backgroundColor: 'transparent',
   },
   icon: {
     marginHorizontal: 10,

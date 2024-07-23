@@ -8,6 +8,12 @@ import Constants from 'expo-constants';
 
 const token = process.env.EXPO_PUBLIC_API_KEY;
 
+// Define the type for the search parameters
+interface SearchParams {
+  login: string;
+  color?: string;
+}
+
 export default function Tab() {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({
@@ -19,35 +25,34 @@ export default function Tab() {
     public_repos: 0,
     bio: ''
   });
-  const [color, setColor] = useState<string>('#495569'); 
+  const [color, setColor] = useState<string>('#495569');
 
-  const user = useLocalSearchParams();
+  // Typecast the result of useLocalSearchParams to SearchParams
+  const user = useLocalSearchParams() as unknown as SearchParams;
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://api.github.com/users/${user.login}`,
-          {
-            headers: {
-              Authorization: `token ${token}`
-            }
+        const response = await axios.get(`https://api.github.com/users/${user.login}`, {
+          headers: {
+            Authorization: `token ${token}`
           }
-        );
-        
+        });
+
         setUserData(response.data);
         if (typeof user.color === 'string') {
           setColor(user.color);
-        } 
-        else {
+        } else {
           setColor('#495569');
-        }       
+        }
         setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
         setLoading(false);
       }
     };
+
     fetchUserData();
   }, [user.login, user.color]);
 
@@ -66,7 +71,7 @@ export default function Tab() {
               avatarUrl={userData.avatar_url}
               userBio={userData.bio}
               userRepos={userData.public_repos}
-              color={color} 
+              color={color}
             />
             <View style={styles.repoButtonContainer}>
               <RepoButton user={user} color={color} />
@@ -76,7 +81,7 @@ export default function Tab() {
       </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -85,8 +90,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   repoButtonContainer: {
-    marginVertical: 20, 
-    width: '100%', 
-    alignItems: 'center', 
+    marginVertical: 20,
+    width: '100%',
+    alignItems: 'center',
   },
 });
