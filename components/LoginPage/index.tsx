@@ -48,7 +48,7 @@ const LoginPage = () => {
             </TouchableOpacity>
             <View style={styles.footer}>
                 <Text style={styles.footerText}>Don't have an account?</Text>
-                <TouchableOpacity onPress={() => router.push('/auth/register')}>
+                <TouchableOpacity onPress={() => router.push('/')}>
                     <Text style={styles.link}>Sign Up</Text>
                 </TouchableOpacity>
             </View>

@@ -1,10 +1,18 @@
 // app/(tabs)/search.tsx
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import SearchBar from '@/components/SearchBar/index';
+import { useSession } from '@/context/AuthContext';
 
 const SearchScreen = () => {
+
+  const userId = useSession();
+
+  useEffect(() => {
+    console.log('User ID after login:', userId);
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>

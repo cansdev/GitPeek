@@ -1,16 +1,20 @@
-import { useContext, createContext, PropsWithChildren } from 'react';
+import { createContext, PropsWithChildren, useContext } from 'react';
 import { useStorageState } from '../hooks/useStorageState';
 
-const AuthContext = createContext<{
+interface AuthContextType {
   signIn: (username: string, password: string) => Promise<void>;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
-}>({
+  userId?: string | null;
+}
+
+const AuthContext = createContext<AuthContextType>({
   signIn: async () => {},
   signOut: () => {},
   session: null,
   isLoading: false,
+  userId: null,
 });
 
 export function useSession() {
@@ -22,7 +26,7 @@ export function useSession() {
 }
 
 export function SessionProvider({ children }: PropsWithChildren<{}>) {
-  const [[isLoading, session], setSession] = useStorageState('session');
+  const [userId, setUserId] = useStorageState<string | null>('userId', null); // Store and retrieve userId
 
   const signIn = async (username: string, password: string) => {
     try {
@@ -41,10 +45,10 @@ export function SessionProvider({ children }: PropsWithChildren<{}>) {
 
       const data = await response.json();
       console.log(data);
-      const token = data.token;
+      const { userId } = data; // Assuming your API returns userId
 
-      // Store the session token or identifier
-      setSession(token);
+      // Store the userId
+      setUserId(userId);
 
     } catch (error) {
       console.error('Sign in error:', error);
@@ -53,7 +57,7 @@ export function SessionProvider({ children }: PropsWithChildren<{}>) {
   };
 
   const signOut = () => {
-    setSession(null); // Clear the stored session token or identifier
+    setUserId(null); // Clear the stored userId
   };
 
   return (
@@ -61,11 +65,14 @@ export function SessionProvider({ children }: PropsWithChildren<{}>) {
       value={{
         signIn,
         signOut,
-        session,
-        isLoading,
+        session: null, // No session management in this example
+        isLoading: false, // No loading state in this example
+        userId,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
+
+export default AuthContext;
