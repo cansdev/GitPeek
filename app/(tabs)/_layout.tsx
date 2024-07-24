@@ -59,7 +59,6 @@ export default function TabLayout() {
           title:"User Profile",
           tabBarButton: () => null,
         }}
-
         />
 
         </Tabs>

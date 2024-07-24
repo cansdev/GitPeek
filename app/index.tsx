@@ -11,7 +11,6 @@ const Register = () => {
   const router = useRouter();
 
   const handleRegister = () => {
-    signIn(); 
     router.push('/auth/sign-in'); 
   };
 

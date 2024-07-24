@@ -57,9 +57,7 @@ const SearchBar: React.FC = () => {
             });
             setUserData(response.data.items);
           } catch (err) {
-            // Check the type of error here
             if (axios.isAxiosError(err)) {
-              // Type assertion for AxiosError
               const axiosError = err as AxiosError;
               if (axiosError.response && axiosError.response.status === 403) {
                 setError('Rate limit exceeded. Please try again later.');

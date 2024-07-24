@@ -8,7 +8,6 @@ import Constants from 'expo-constants';
 
 const token = process.env.EXPO_PUBLIC_API_KEY;
 
-// Define the type for the search parameters
 interface SearchParams {
   login: string;
   color?: string;
@@ -27,7 +26,6 @@ export default function Tab() {
   });
   const [color, setColor] = useState<string>('#495569');
 
-  // Typecast the result of useLocalSearchParams to SearchParams
   const user = useLocalSearchParams() as unknown as SearchParams;
 
   useEffect(() => {
