@@ -25,7 +25,7 @@ const SearchBar: React.FC = () => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
   const handleUserPress = (user: User, color: string) => {
-    console.log(user.login);
+    console.log('Selected user:', user.login);
     setSelectedColor(color);
     router.navigate({
       pathname: './userProfile',
@@ -48,6 +48,8 @@ const SearchBar: React.FC = () => {
         setLoading(true);
         setError(null);
 
+        console.log(`Fetching users with query: ${enterText}`);
+
         timer = setTimeout(async () => {
           try {
             const response = await axios.get(`https://api.github.com/search/users?q=${enterText}`, {
@@ -55,24 +57,43 @@ const SearchBar: React.FC = () => {
                 Authorization: `token ${token}`
               }
             });
-            setUserData(response.data.items);
-          } catch (err) {
+
+            console.log('GitHub API Response:', response);
+
+            if (response.data && response.data.items) {
+              setUserData(response.data.items);
+            } else {
+              setError('No data received from GitHub API');
+              setUserData(null);
+            }
+          } catch (err: any) {
+            console.error('GitHub API Error:', err);
+
             if (axios.isAxiosError(err)) {
               const axiosError = err as AxiosError;
-              if (axiosError.response && axiosError.response.status === 403) {
-                setError('Rate limit exceeded. Please try again later.');
+              if (axiosError.response) {
+                if (axiosError.response.status === 403) {
+                  setError('Rate limit exceeded. Please try again later.');
+                } else if (axiosError.response.status === 404) {
+                  setError('GitHub API endpoint not found.');
+                } else {
+                  setError(`GitHub API Error: ${axiosError.response.status}`);
+                }
+              } else if (axiosError.request) {
+                setError('Network error. Request made but no response received.');
               } else {
-                setError('Error fetching github users. Please check your network connection.');
+                setError(`Axios error: ${axiosError.message}`);
               }
+              setUserData(null);
             } else {
-              setError('Error occurred.');
+              setError(`Error occurred: ${err.message}`);
+              setUserData(null);
             }
-            setUserData(null);
           }
         }, 500);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error:', err);
-        setError('Error occurred.');
+        setError(`Error occurred: ${err.message}`);
         setUserData(null);
       } finally {
         setLoading(false);
@@ -93,7 +114,7 @@ const SearchBar: React.FC = () => {
       toValue: 10,
       duration: 300,
       useNativeDriver: false,
-    }).start();
+    }).start(() => console.log('Animation started'));
   };
 
   const handleBlur = () => {
@@ -101,7 +122,7 @@ const SearchBar: React.FC = () => {
       toValue: 25,
       duration: 300,
       useNativeDriver: false,
-    }).start();
+    }).start(() => console.log('Animation finished'));
   };
 
   const marginLeft = animation.interpolate({

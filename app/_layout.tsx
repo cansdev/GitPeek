@@ -17,10 +17,10 @@ const RootLayout: React.FC = () => {
 
 export default function Layout() {
   return (
-    <BookmarkProvider>
       <SessionProvider>
+    <BookmarkProvider>
         <RootLayout />
-      </SessionProvider>
     </BookmarkProvider>
+      </SessionProvider>
   );
 }

@@ -5,6 +5,7 @@ import { useLocalSearchParams } from 'expo-router';
 import axios from 'axios';
 import RepoButton from '@/components/RepoButton/index';
 import Constants from 'expo-constants';
+import { useSession } from '@/context/AuthContext';
 
 const token = process.env.EXPO_PUBLIC_API_KEY;
 
@@ -24,6 +25,8 @@ export default function Tab() {
     public_repos: 0,
     bio: ''
   });
+  const { userId } = useSession();
+  console.log("Currently on user: ",userId)
   const [color, setColor] = useState<string>('#495569');
 
   const user = useLocalSearchParams() as unknown as SearchParams;

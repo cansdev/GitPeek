@@ -7,6 +7,7 @@ import { useSession } from '@/context/AuthContext';
 
 const SearchScreen = () => {
     const { userId } = useSession();
+    console.log("Currently on user: ",userId)
 
     useEffect(() => {
         console.log('User ID after login:', userId);

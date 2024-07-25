@@ -1,81 +1,110 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { useSession } from './AuthContext'; 
+import { useSession } from './AuthContext';
 
-interface Bookmark {
-  id: number;
-  name: string;
+export interface Bookmark {
+  id?: string; // Optional if backend handles auto-increment
+  repository_id: string;
+  userId: string; // Optional, if needed
   stars?: number;
   description: string;
+  name: string;
 }
 
 interface BookmarkContextType {
   bookmarks: Bookmark[];
   addBookmark: (repo: Bookmark) => Promise<void>;
-  removeBookmark: (repoId: number) => Promise<void>;
+  removeBookmark: (repoId: string) => Promise<void>;
   clearBookmarks: () => Promise<void>;
 }
 
 const BookmarkContext = createContext<BookmarkContextType | undefined>(undefined);
 
-export const BookmarkProvider: React.FC<{children: ReactNode}> = ({ children }) => {
+export const BookmarkProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
-  const { userId } = useSession(); 
-  
+  const { userId } = useSession();
 
   useEffect(() => {
-    fetchBookmarks();
-  }, [userId]); 
-
-  const fetchBookmarks = async () => {
-    try {
-      if (userId) {
-        const response = await axios.get(`http://localhost:8080/bookmarks/${userId}`); 
-        setBookmarks(response.data);
+    const fetchBookmarks = async () => {
+      try {
+        if (!userId) return;
+  
+        const response = await fetch(`http://localhost:8080/bookmarks/${userId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch bookmarks');
+        }
+        const data = await response.json();
+        setBookmarks(data);
+      } catch (error) {
+        console.error('Error fetching bookmarks:', error);
       }
-    } catch (error) {
-      console.error('Error fetching bookmarks:', error);
+    };
+  
+    if (userId) { // Only fetch bookmarks if userId exists
+      fetchBookmarks();
     }
-  };
+  }, [userId]);
 
   const addBookmark = async (repo: Bookmark) => {
     try {
-      const response = await axios.post('http://localhost:8080/bookmarks', {
-        userId: userId, 
-        repositoryId: repo.id,
-        stars: repo.stars,
-        description: repo.description
+      console.log("Adding bookmark for userId: ", userId);
+      const response = await fetch('http://localhost:8080/bookmarks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId, 
+          repositoryId: repo.repository_id,
+          stars: repo.stars,
+          description: repo.description,
+          name: repo.name,
+        }),
       });
-      setBookmarks([...bookmarks, repo]);
-      await AsyncStorage.setItem('bookmarks', JSON.stringify([...bookmarks, repo]));
+  
+      if (!response.ok) {
+        throw new Error('Failed to add bookmark');
+      }
+  
+      const data = await response.json();
+      setBookmarks(prevBookmarks => [...prevBookmarks, data]);
+      await AsyncStorage.setItem(`bookmarks/${userId}`, JSON.stringify([...bookmarks, data]));
     } catch (error) {
       console.error('Error adding bookmark:', error);
     }
   };
-
-  const removeBookmark = async (repoId: number) => {
+  
+  const removeBookmark = async (repoId: string) => {
     try {
-      await axios.delete(`http://localhost:8080/bookmarks/${userId}/${repoId}`); 
-      const updatedBookmarks = bookmarks.filter((item) => item.id !== repoId);
+      const response = await fetch(`http://localhost:8080/bookmarks/${userId}/${repoId}`, {
+        method: 'DELETE',
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to remove bookmark');
+      }
+  
+      const updatedBookmarks = bookmarks.filter((item) => item.repository_id !== repoId);
       setBookmarks(updatedBookmarks);
-      await AsyncStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+      await AsyncStorage.setItem(`bookmarks/${userId}`, JSON.stringify(updatedBookmarks));
     } catch (error) {
       console.error('Error removing bookmark:', error);
     }
   };
+  
+
 
   const clearBookmarks = async () => {
     try {
       setBookmarks([]);
-      await AsyncStorage.removeItem('bookmarks');
+      await AsyncStorage.removeItem(`bookmarks/${userId}`);
     } catch (error) {
       console.error('Error clearing bookmarks:', error);
     }
   };
 
   return (
-    <BookmarkContext.Provider value={{bookmarks, addBookmark, removeBookmark, clearBookmarks}}>
+    <BookmarkContext.Provider value={{ bookmarks, addBookmark, removeBookmark, clearBookmarks }}>
       {children}
     </BookmarkContext.Provider>
   );

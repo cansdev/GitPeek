@@ -1,63 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, FlatList } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import RepoCard from '@/components/RepoCard/index';
-import { useFocusEffect } from 'expo-router';
-import { useCallback } from 'react';
-import { useBookmarks } from '@/context/BookmarkContext';
+import { useBookmarks, Bookmark } from '@/context/BookmarkContext';
+import { useSession } from '@/context/AuthContext';
 
-interface Repo {
-  id: number;
-  name: string;
-  stars?: number;
-  description: string;
-}
+const Profile: React.FC = () => {
+  const { bookmarks, clearBookmarks, removeBookmark } = useBookmarks();
+  const { userId } = useSession();
+  const [loading, setLoading] = useState(true);
 
-export default function Tab() {
+  useEffect(() => {
+    setLoading(true);
+    const fetchBookmarks = async () => {
+      try {
+        if (!userId) return;
+        const response = await fetch(`http://localhost:8080/bookmarks/${userId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch bookmarks');
+        }
+        const data = await response.json();
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching bookmarks:', error);
+        setLoading(false);
+      }
+    };
+    fetchBookmarks();
+  }, [userId]);
 
-  const { bookmarks, clearBookmarks } = useBookmarks();
-  const [bookmarkedRepos, setBookmarkedRepos] = useState<Repo[]>([]);  
-
-   useFocusEffect(
-    useCallback(() => {
-      const sortedBookmarks = [...bookmarks].sort((a,b) => (b.stars || 0) - (a.stars || 0));
-      setBookmarkedRepos(sortedBookmarks);
-     console.log('Bookmarks from context:', bookmarks);
-    }, [bookmarks])
-  );
-  
-  const renderItem = ({ item }: { item: Repo }) => (
+  const renderItem = ({ item }: { item: Bookmark }) => (
     <RepoCard
-      key={item.id}
+      key={item.id} 
       repoName={item.name}
-      repoStars={item.stars}
+      repoStars={item.stars || 0}
       repoDesc={item.description}
-      repoId={item.id}
+      repoId={item.repository_id}
       bookmarked={true}
+      onPressBookmark={() => removeBookmark(item.repository_id)} 
     />
   );
 
+  // Function to extract a string key from Bookmark
+  const keyExtractor = (item: Bookmark, index: number) => {
+    if (item.id) {
+      return item.id.toString(); // Convert id to string if it's defined
+    }
+    return index.toString(); // Fallback to index.toString() if id is undefined
+  };
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={clearBookmarks}>
         <Text style={styles.buttonText}>Clear Bookmarks</Text>
       </TouchableOpacity>
-      <FlatList
-        data={bookmarkedRepos}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        ListEmptyComponent={<Text>No bookmarked repositories yet.</Text>}
-        contentContainerStyle={styles.flatList}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <FlatList
+          data={bookmarks}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor} // Use keyExtractor to return item.id as string
+          ListEmptyComponent={<Text>No bookmarked repositories yet.</Text>}
+          contentContainerStyle={styles.flatList}
+        />
+      )}
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    flexDirection: 'column',
     justifyContent: 'flex-start',
   },
   flatList: {
@@ -66,16 +79,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   button: {
-    backgroundColor: '#007bff', 
-    borderRadius: 5, 
-    paddingVertical: 10, 
-    paddingHorizontal: 20, 
-    marginVertical: 20, 
+    backgroundColor: '#007bff',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginVertical: 20,
     zIndex: 10,
   },
   buttonText: {
-    color: 'white', 
+    color: 'white',
     fontSize: 16,
-    textAlign: 'center', 
+    textAlign: 'center',
   },
 });
+
+export default Profile;
