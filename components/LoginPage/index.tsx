@@ -1,5 +1,7 @@
+// index.tsx
+
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert, Image, ActivityIndicator } from 'react-native';
 import { useSession } from '@/context/AuthContext';
 import { useRouter } from 'expo-router';
 import styles from './styles';
@@ -7,7 +9,7 @@ import styles from './styles';
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { signIn } = useSession();
+    const { signIn, isLoading } = useSession();
     const router = useRouter();
 
     const handleLogin = async () => {
@@ -17,11 +19,15 @@ const LoginPage = () => {
         }
 
         try {
-            await signIn(username, password);
-            router.push('/(tabs)/search');
+            await signIn(username, password); // Updated to use signIn from AuthContext
+            router.push('/(tabs)/search'); // Updated navigation
         } catch (error) {
             Alert.alert('Login Error', 'Failed to login');
         }
+    };
+
+    const handleRegister = () => {
+        router.push('/'); // Navigate to registration page
     };
 
     return (
@@ -43,12 +49,20 @@ const LoginPage = () => {
                 value={password}
                 onChangeText={setPassword}
             />
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>Log In</Text>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={handleLogin}
+                disabled={isLoading}
+            >
+                {isLoading ? (
+                    <ActivityIndicator size="small" color="#ffffff" />
+                ) : (
+                    <Text style={styles.buttonText}>Log In</Text>
+                )}
             </TouchableOpacity>
             <View style={styles.footer}>
                 <Text style={styles.footerText}>Don't have an account?</Text>
-                <TouchableOpacity onPress={() => router.push('/')}>
+                <TouchableOpacity onPress={handleRegister}>
                     <Text style={styles.link}>Sign Up</Text>
                 </TouchableOpacity>
             </View>

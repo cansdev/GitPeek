@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { useSession } from './AuthContext'; // Import useSession
+import { useSession } from './AuthContext'; 
 
 interface Bookmark {
   id: number;
@@ -21,16 +21,17 @@ const BookmarkContext = createContext<BookmarkContextType | undefined>(undefined
 
 export const BookmarkProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
-  const { userId } = useSession(); // Get userId from useSession
+  const { userId } = useSession(); 
+  
 
   useEffect(() => {
     fetchBookmarks();
-  }, [userId]); // Trigger fetch on userId change
+  }, [userId]); 
 
   const fetchBookmarks = async () => {
     try {
       if (userId) {
-        const response = await axios.get(`http://localhost:8080/bookmarks/${userId}`); // Use userId here
+        const response = await axios.get(`http://localhost:8080/bookmarks/${userId}`); 
         setBookmarks(response.data);
       }
     } catch (error) {
