@@ -8,7 +8,7 @@ import { SessionProvider } from '../context/AuthContext';
 const RootLayout: React.FC = () => {
   return (
     <Stack>
-      <Stack.Screen name="index" options={{headerShown: false}} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="auth" options={{ headerShown: false }} />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
     </Stack>
@@ -17,10 +17,10 @@ const RootLayout: React.FC = () => {
 
 export default function Layout() {
   return (
-      <SessionProvider>
-    <BookmarkProvider>
+    <SessionProvider>
+      <BookmarkProvider>
         <RootLayout />
-    </BookmarkProvider>
-      </SessionProvider>
+      </BookmarkProvider>
+    </SessionProvider>
   );
 }

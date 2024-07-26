@@ -1,14 +1,14 @@
-import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSession } from './AuthContext';
 
 export interface Bookmark {
-  id?: string; // Optional if backend handles auto-increment
-  repository_id: string;
-  userId: string; // Optional, if needed
+  name: string;
+  id?: string; 
+  repositoryId: string;
+  userId: string; 
   stars?: number;
   description: string;
-  name: string;
 }
 
 interface BookmarkContextType {
@@ -16,6 +16,7 @@ interface BookmarkContextType {
   addBookmark: (repo: Bookmark) => Promise<void>;
   removeBookmark: (repoId: string) => Promise<void>;
   clearBookmarks: () => Promise<void>;
+  fetchBookmarks: () => Promise<void>; 
 }
 
 const BookmarkContext = createContext<BookmarkContextType | undefined>(undefined);
@@ -24,38 +25,41 @@ export const BookmarkProvider: React.FC<{ children: ReactNode }> = ({ children }
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const { userId } = useSession();
 
-  useEffect(() => {
-    const fetchBookmarks = async () => {
-      try {
-        if (!userId) return;
-  
-        const response = await fetch(`http://localhost:8080/bookmarks/${userId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch bookmarks');
-        }
-        const data = await response.json();
-        setBookmarks(data);
-      } catch (error) {
-        console.error('Error fetching bookmarks:', error);
+  const fetchBookmarks = useCallback(async () => {
+    try {
+      if (!userId) return;
+
+      const response = await fetch(`http://localhost:8080/bookmarks/${userId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch bookmarks');
       }
-    };
-  
-    if (userId) { // Only fetch bookmarks if userId exists
-      fetchBookmarks();
+      const data = await response.json();
+      console.log('Fetched bookmarks:', data);
+      setBookmarks(data);
+    } catch (error) {
+      console.error('Error fetching bookmarks:', error);
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (userId) {
+      fetchBookmarks();
+    }
+  }, [userId, fetchBookmarks]);
+
   const addBookmark = async (repo: Bookmark) => {
     try {
-      console.log("Adding bookmark for userId: ", userId);
+      console.log("Adding bookmark for userId:", userId);
+      console.log("Bookmark data:", repo); 
+  
       const response = await fetch('http://localhost:8080/bookmarks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: userId, 
-          repositoryId: repo.repository_id,
+          userId: userId,
+          repositoryId: repo.repositoryId,
           stars: repo.stars,
           description: repo.description,
           name: repo.name,
@@ -74,25 +78,25 @@ export const BookmarkProvider: React.FC<{ children: ReactNode }> = ({ children }
     }
   };
   
+
   const removeBookmark = async (repoId: string) => {
     try {
+      console.log("Removing bookmark with repoId:", repoId);
       const response = await fetch(`http://localhost:8080/bookmarks/${userId}/${repoId}`, {
         method: 'DELETE',
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to remove bookmark');
       }
-  
-      const updatedBookmarks = bookmarks.filter((item) => item.repository_id !== repoId);
+
+      const updatedBookmarks = bookmarks.filter((item) => item.repositoryId !== repoId);
       setBookmarks(updatedBookmarks);
       await AsyncStorage.setItem(`bookmarks/${userId}`, JSON.stringify(updatedBookmarks));
     } catch (error) {
       console.error('Error removing bookmark:', error);
     }
   };
-  
-
 
   const clearBookmarks = async () => {
     try {
@@ -104,7 +108,7 @@ export const BookmarkProvider: React.FC<{ children: ReactNode }> = ({ children }
   };
 
   return (
-    <BookmarkContext.Provider value={{ bookmarks, addBookmark, removeBookmark, clearBookmarks }}>
+    <BookmarkContext.Provider value={{ bookmarks, addBookmark, removeBookmark, clearBookmarks, fetchBookmarks }}>
       {children}
     </BookmarkContext.Provider>
   );

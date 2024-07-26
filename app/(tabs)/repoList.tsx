@@ -18,7 +18,7 @@ const token = process.env.EXPO_PUBLIC_API_KEY;
 const Tab = () => {
   const [repoData, setRepoData] = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
-  const { addBookmark, bookmarks } = useBookmarks();
+  const { addBookmark, fetchBookmarks, removeBookmark, bookmarks } = useBookmarks();
   const { userId } = useSession();
   const user = useLocalSearchParams();
 
@@ -41,25 +41,32 @@ const Tab = () => {
       }
     };
 
-    if (userId != '' && userId) { // Ensure userId is defined before using it
+    if (userId != '' && userId) {
       fetchRepoData();
     }
   }, [user.login]);
 
-  const isBookmarked = (repoId: string) => bookmarks.some((bookmark) => bookmark.repository_id === repoId);
+  const isBookmarked = (repoId: string) => bookmarks.some((bookmark) => bookmark.repositoryId === repoId);
 
   const handleBookmark = async (repo: Repo) => {
     try {
       if (!userId) {
         throw new Error('userId is undefined');
       }
+      if (isBookmarked(repo.id)) {
+        await removeBookmark(repo.id)
+        return
+      }
       await addBookmark({
         userId: userId,
-        repository_id: repo.id,
+        repositoryId: repo.id,
         name: repo.name,
         stars: repo.stargazers_count,
         description: repo.description,
       });
+
+      fetchBookmarks();
+
     } catch (error) {
       console.error('Error adding bookmark:', error);
     }
@@ -72,7 +79,7 @@ const Tab = () => {
       repoDesc={item.description}
       repoId={item.id}
       bookmarked={isBookmarked(item.id)}
-      onPressBookmark={() => handleBookmark(item)} 
+      onPressBookmark={() => handleBookmark(item)}
     />
   );
 

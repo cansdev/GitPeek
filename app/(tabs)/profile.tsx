@@ -1,52 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import RepoCard from '@/components/RepoCard/index';
 import { useBookmarks, Bookmark } from '@/context/BookmarkContext';
 import { useSession } from '@/context/AuthContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Profile: React.FC = () => {
-  const { bookmarks, clearBookmarks, removeBookmark } = useBookmarks();
+  const { bookmarks, clearBookmarks, removeBookmark, fetchBookmarks } = useBookmarks(); 
   const { userId } = useSession();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchBookmarksCallback = useCallback(async () => {
     setLoading(true);
-    const fetchBookmarks = async () => {
-      try {
-        if (!userId) return;
-        const response = await fetch(`http://localhost:8080/bookmarks/${userId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch bookmarks');
-        }
-        const data = await response.json();
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching bookmarks:', error);
-        setLoading(false);
-      }
-    };
-    fetchBookmarks();
-  }, [userId]);
+    try {
+      await fetchBookmarks(); 
+    } catch (error) {
+      console.error('Error fetching bookmarks:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchBookmarks]);
 
-  const renderItem = ({ item }: { item: Bookmark }) => (
-    <RepoCard
-      key={item.id} 
-      repoName={item.name}
-      repoStars={item.stars || 0}
-      repoDesc={item.description}
-      repoId={item.repository_id}
-      bookmarked={true}
-      onPressBookmark={() => removeBookmark(item.repository_id)} 
-    />
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchBookmarksCallback();
+    }, [fetchBookmarksCallback])
   );
 
-  // Function to extract a string key from Bookmark
-  const keyExtractor = (item: Bookmark, index: number) => {
-    if (item.id) {
-      return item.id.toString(); // Convert id to string if it's defined
-    }
-    return index.toString(); // Fallback to index.toString() if id is undefined
+  const renderItem = ({ item }: { item: Bookmark }) => {
+    console.log("Rendering item: ", item.repositoryId)
+    return (
+      <RepoCard
+        key={item.repositoryId} 
+        repoName={item.name}
+        repoStars={item.stars || 0}
+        repoDesc={item.description}
+        repoId={item.repositoryId}
+        bookmarked={true}
+        onPressBookmark={() => removeBookmark(item.repositoryId)}
+      />
+    );
   };
+
+  const keyExtractor = (item: Bookmark) => item.repositoryId; 
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.button} onPress={clearBookmarks}>
@@ -58,7 +55,7 @@ const Profile: React.FC = () => {
         <FlatList
           data={bookmarks}
           renderItem={renderItem}
-          keyExtractor={keyExtractor} // Use keyExtractor to return item.id as string
+          keyExtractor={keyExtractor}
           ListEmptyComponent={<Text>No bookmarked repositories yet.</Text>}
           contentContainerStyle={styles.flatList}
         />
