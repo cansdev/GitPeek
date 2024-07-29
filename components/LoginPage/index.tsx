@@ -17,7 +17,6 @@ const LoginPage = () => {
             Alert.alert('Validation Error', 'Please enter both username and password');
             return;
         }
-
         try {
             await signIn(username, password); // Updated to use signIn from AuthContext
             router.push('/(tabs)/search'); // Updated navigation
