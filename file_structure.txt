@@ -1,0 +1,57 @@
+.
+├── Agent
+├── README.md
+├── android
+│   ├── app
+│   ├── build.gradle
+│   ├── gradle
+│   ├── gradle.properties
+│   ├── gradlew
+│   ├── gradlew.bat
+│   └── settings.gradle
+├── app
+│   ├── (tabs)
+│   ├── _layout.tsx
+│   ├── auth
+│   └── index.tsx
+├── app.config.js
+├── application-70863a89-f9ef-4106-91cd-484098e6c286.apk
+├── assets
+│   ├── fonts
+│   └── images
+├── babel.config.js
+├── components
+│   ├── LoginPage
+│   ├── ProfileCard
+│   ├── RegisterPage
+│   ├── RepoButton
+│   ├── RepoCard
+│   ├── SearchBar
+│   ├── SplashScreen
+│   └── UserCard
+├── constants
+│   └── Colors.ts
+├── context
+│   ├── AuthContext.tsx
+│   └── BookmarkContext.tsx
+├── dotenv.config.js
+├── eas.json
+├── expo-env.d.ts
+├── file_structure.txt
+├── hooks
+│   └── useStorageState.ts
+├── ios
+│   ├── GitPeek
+│   ├── GitPeek.xcodeproj
+│   ├── GitPeek.xcworkspace
+│   ├── Podfile
+│   ├── Podfile.lock
+│   ├── Podfile.properties.json
+│   └── Pods
+├── package-lock.json
+├── package.json
+├── scripts
+│   └── reset-project.js
+└── tsconfig.json
+
+28 directories, 27 files

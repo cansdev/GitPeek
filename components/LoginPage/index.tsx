@@ -1,4 +1,4 @@
-// index.tsx
+// LoginPage/index.tsx
 
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, Image, ActivityIndicator } from 'react-native';
@@ -18,15 +18,15 @@ const LoginPage = () => {
             return;
         }
         try {
-            await signIn(username, password); // Updated to use signIn from AuthContext
-            router.push('/(tabs)/search'); // Updated navigation
+            await signIn(username, password);
+            router.push('/(tabs)/search'); 
         } catch (error) {
             Alert.alert('Login Error', 'Failed to login');
         }
     };
 
     const handleRegister = () => {
-        router.push('/'); // Navigate to registration page
+        router.push('/'); 
     };
 
     return (

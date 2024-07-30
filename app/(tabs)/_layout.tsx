@@ -18,7 +18,7 @@ export default function TabLayout() {
         zIndex: 10,
       },
       headerStyle: {
-        height: 80,
+        height: 120,
         borderBottomLeftRadius: 12,
         borderBottomRightRadius: 12,
       }

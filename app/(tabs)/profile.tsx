@@ -46,9 +46,6 @@ const Profile: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button} onPress={clearBookmarks}>
-        <Text style={styles.buttonText}>Clear Bookmarks</Text>
-      </TouchableOpacity>
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
